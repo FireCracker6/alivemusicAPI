@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CollaborateMusicAPI.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20231022225923_SeedData")]
-    partial class SeedData
+    [Migration("20231023120601_AddUserVerificationCodeTable")]
+    partial class AddUserVerificationCodeTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -175,6 +175,37 @@ namespace CollaborateMusicAPI.Migrations
                         });
                 });
 
+            modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.UserVerificationCode", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("UserVerificationCodes");
+                });
+
             modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.Users", b =>
                 {
                     b.Property<int>("Id")
@@ -211,7 +242,7 @@ namespace CollaborateMusicAPI.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2023, 10, 22, 22, 59, 23, 506, DateTimeKind.Utc).AddTicks(3196),
+                            CreatedDate = new DateTime(2023, 10, 23, 12, 6, 0, 947, DateTimeKind.Utc).AddTicks(2188),
                             Email = "testuser@example.com",
                             OAuthId = "OauthTest",
                             OAuthProvider = "TestProvider",
@@ -261,6 +292,17 @@ namespace CollaborateMusicAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.UserVerificationCode", b =>
+                {
+                    b.HasOne("CollaborateMusicAPI.Models.Entities.Users", "Users")
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.UserProfile", b =>

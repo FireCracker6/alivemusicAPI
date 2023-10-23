@@ -14,6 +14,7 @@ public class ApplicationDBContext : DbContext
     public DbSet<Artist> Artists { get; set; }
     public DbSet<Album> Albums { get; set; }
     public DbSet<Track> Tracks { get; set; }
+    public DbSet<UserVerificationCode> UserVerificationCodes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

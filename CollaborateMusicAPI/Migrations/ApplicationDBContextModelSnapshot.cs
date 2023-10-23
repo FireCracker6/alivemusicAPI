@@ -56,7 +56,7 @@ namespace CollaborateMusicAPI.Migrations
 
                     b.HasIndex("ArtistID");
 
-                    b.ToTable("Albums", (string)null);
+                    b.ToTable("Albums");
                 });
 
             modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.Artist", b =>
@@ -87,7 +87,7 @@ namespace CollaborateMusicAPI.Migrations
 
                     b.HasIndex("UserProfileID");
 
-                    b.ToTable("Artists", (string)null);
+                    b.ToTable("Artists");
                 });
 
             modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.Track", b =>
@@ -123,7 +123,7 @@ namespace CollaborateMusicAPI.Migrations
 
                     b.HasIndex("AlbumID");
 
-                    b.ToTable("Tracks", (string)null);
+                    b.ToTable("Tracks");
                 });
 
             modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.UserProfile", b =>
@@ -158,7 +158,7 @@ namespace CollaborateMusicAPI.Migrations
                     b.HasIndex("UserID")
                         .IsUnique();
 
-                    b.ToTable("UserProfiles", (string)null);
+                    b.ToTable("UserProfiles");
 
                     b.HasData(
                         new
@@ -170,6 +170,37 @@ namespace CollaborateMusicAPI.Migrations
                             UserID = 1,
                             WebsiteURL = "https://example.com"
                         });
+                });
+
+            modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.UserVerificationCode", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("UserVerificationCodes");
                 });
 
             modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.Users", b =>
@@ -202,13 +233,13 @@ namespace CollaborateMusicAPI.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2023, 10, 22, 22, 59, 23, 506, DateTimeKind.Utc).AddTicks(3196),
+                            CreatedDate = new DateTime(2023, 10, 23, 12, 6, 0, 947, DateTimeKind.Utc).AddTicks(2188),
                             Email = "testuser@example.com",
                             OAuthId = "OauthTest",
                             OAuthProvider = "TestProvider",
@@ -258,6 +289,17 @@ namespace CollaborateMusicAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.UserVerificationCode", b =>
+                {
+                    b.HasOne("CollaborateMusicAPI.Models.Entities.Users", "Users")
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.UserProfile", b =>
