@@ -1,25 +1,36 @@
-﻿using CollaborateMusicAPI.Contexts;
+﻿using System.Diagnostics;
+using CollaborateMusicAPI.Contexts;
 using CollaborateMusicAPI.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace CollaborateMusicAPI.Repositories;
 
-public class UsersRepository : Repository<Users>
+public interface IUsersRepository : IRepository<Users, ApplicationDBContext>
 {
-    private readonly ApplicationDBContext _context;
+    Task<Users?> GetUserByEmailAsync(string email);
+}
 
-    public UsersRepository(ApplicationDBContext context)
-    {
-        _context = context;
-    }
-    public Users GetUserByEmail(string email)
-    {
-        return _context.Users.FirstOrDefault(u => u.Email == email);
-    }
 
-    public override async Task<Users> CreateAsync(Users user)
+public class UsersRepository : Repository<Users, ApplicationDBContext>, IUsersRepository
+{
+    
+
+    public UsersRepository(ApplicationDBContext context) : base (context)
     {
-        await _context.Users.AddAsync(user);
-        await _context.SaveChangesAsync();
+      
+    }
+    public async Task<Users?> GetUserByEmailAsync(string email)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+        Debug.WriteLine($"Searched for email: {email}. Found: {user?.Email ?? "No user found"}");
         return user;
     }
+   
+
+    //public override async Task<Users> CreateAsync(Users user)
+    //{
+    //    await _context.Users.AddAsync(user);
+    //    await _context.SaveChangesAsync();
+    //    return user;
+    //}
 }

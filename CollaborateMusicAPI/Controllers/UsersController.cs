@@ -1,19 +1,18 @@
-﻿using CollaborateMusicAPI.Models.DTOs;
-using CollaborateMusicAPI.Models.Entities;
-using CollaborateMusicAPI.Repositories;
+﻿using System.Diagnostics;
+using CollaborateMusicAPI.Models;
+using CollaborateMusicAPI.Models.DTOs;
 using CollaborateMusicAPI.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CollaborateMusicAPI.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/users")]
 [ApiController]
 public class UsersController : ControllerBase
 {
-    private readonly UserService _userService;
+    private readonly IUserService _userService;
 
-    public UsersController(UserService userService)
+    public UsersController(IUserService userService)
     {
         _userService = userService;
     }
@@ -21,33 +20,56 @@ public class UsersController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register(UserRegistrationDto registrationDto)
     {
-        ModelState.Remove("OAuthId");
-        ModelState.Remove("OAuthProvider");
-
-        var existingUser = _userService.GetUserByEmail(registrationDto.Email);
-        if (existingUser != null)
+       try
         {
-            return BadRequest("Email is already in use.");
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            ModelState.Remove("OAuthId");
+            ModelState.Remove("OAuthProvider");
+
+            // Await the asynchronous method
+            var existingUserResponse = await _userService.GetUserByEmailAsync(registrationDto.Email);
+            if (existingUserResponse.Content != null)
+            {
+                return BadRequest("Email is already in use.");
+            }
+
+
+
+
+            var response = await _userService.CreateAsync(new ServiceRequest<UserRegistrationDto>
+            {
+                Content = registrationDto
+
+            });
+
+            return StatusCode((int)response.StatusCode, response);
+
         }
-
-        if (!ModelState.IsValid)
+        catch (Exception ex)
         {
-            return BadRequest(ModelState);
+           Debug.WriteLine(ex.Message);
+            return Problem();
         }
-
-        Users user = new Users
-        {
-            Email = registrationDto.Email,
-            PasswordHash = registrationDto.Password,
-            OAuthProvider = registrationDto.OAuthProvider ?? "default value",
-            OAuthId = registrationDto.OAuthId ?? "default value",
-
-        };
-        var result = await _userService.CreateAccount(user);
-        if (result != null)
-        {
-            return Ok(result);
-        }
-        return BadRequest("Failed to create account.");
+      
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetUsers()
+    {
+        try
+        {
+            var users = await _userService.GetAllAsync();
+            return Ok(users);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            return Problem();
+        }
+    }
+
 }

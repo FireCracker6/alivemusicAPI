@@ -6,14 +6,19 @@ using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddTransient<UsersRepository>();
-builder.Services.AddTransient<UserService>();   
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+// Add services to the container.
+builder.Services.AddTransient<IUsersRepository, UsersRepository>();
+// builder.Services.AddTransient<UserService>();   
+builder.Services.AddTransient<IUserService, UserService>();
+
 
 builder.Services.AddCors(options =>
 {
