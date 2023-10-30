@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq.Expressions;
 using CollaborateMusicAPI.Contexts;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+
 
 namespace CollaborateMusicAPI.Repositories;
 
@@ -51,10 +51,11 @@ public abstract class Repository<TEntity, TbContext> : IRepository<TEntity, Appl
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
-            return null!;
+            throw; 
         }
     }
-    
+
+
 
     public virtual async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate)
     {

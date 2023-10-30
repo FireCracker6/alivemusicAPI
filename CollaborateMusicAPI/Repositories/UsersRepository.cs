@@ -27,10 +27,5 @@ public class UsersRepository : Repository<Users, ApplicationDBContext>, IUsersRe
     }
    
 
-    //public override async Task<Users> CreateAsync(Users user)
-    //{
-    //    await _context.Users.AddAsync(user);
-    //    await _context.SaveChangesAsync();
-    //    return user;
-    //}
+    
 }

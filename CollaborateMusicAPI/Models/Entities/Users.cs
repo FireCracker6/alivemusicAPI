@@ -22,4 +22,9 @@ public class Users
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
     public virtual UserProfile UserProfile { get; set; } = null!;
+
+    public static implicit operator Users(ServiceResponse<Users> v)
+    {
+        throw new NotImplementedException();
+    }
 }

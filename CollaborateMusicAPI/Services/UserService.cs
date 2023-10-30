@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
-using System.Linq.Expressions;
-using Azure;
+using CollaborateMusicAPI.Authentication;
+using CollaborateMusicAPI.Authorization;
 using CollaborateMusicAPI.Models;
 using CollaborateMusicAPI.Models.DTOs;
 using CollaborateMusicAPI.Models.Entities;
@@ -10,13 +10,11 @@ namespace CollaborateMusicAPI.Services;
 
 public interface IUserService
 {
-    Task<ServiceResponse<Users>> CreateAsync(ServiceRequest<UserRegistrationDto> request);
+    Task<ServiceResponse<UserWithTokenResponse>> CreateAsync(ServiceRequest<UserRegistrationDto> request);
+    Task<ServiceResponse<UserWithTokenResponse>> CreateGoogleUserAsync(ServiceRequest<OAuthRegistrationDTO> request);
     Task<ServiceResponse<Users>> GetUserByEmailAsync(string email);
     Task<ServiceResponse<IEnumerable<Users>>> GetAllAsync();
    
-
-
-
     //Task<ServiceResponse<Users>> UpdateUserAsync(int id, ServiceRequest<UserUpdateDto> request);
     //Task<ServiceResponse<Users>> DeleteUserAsync(int id);
     //Task<ServiceResponse<Users>> UpdatePasswordAsync(int id, ServiceRequest<UserUpdatePasswordDto> request);
@@ -31,10 +29,12 @@ public interface IUserService
 public class UserService : IUserService
 {
     private readonly IUsersRepository _usersRepository;
+    private readonly GenerateTokenService _generateTokenService;
 
-    public UserService(IUsersRepository usersRepository)
+    public UserService(IUsersRepository usersRepository, GenerateTokenService generateTokenService)
     {
         _usersRepository = usersRepository;
+        _generateTokenService = generateTokenService;
     }
 
     public async Task<Users> CreateAccount(Users user)
@@ -42,9 +42,9 @@ public class UserService : IUserService
         return await _usersRepository.CreateAsync(user);
     }
 
-    public async Task<ServiceResponse<Users>> CreateAsync(ServiceRequest<UserRegistrationDto> request)
+    public async Task<ServiceResponse<UserWithTokenResponse>> CreateAsync(ServiceRequest<UserRegistrationDto> request)
     {
-        var response = new ServiceResponse<Users>();
+        var response = new ServiceResponse<UserWithTokenResponse>();
 
         try
         {
@@ -56,24 +56,44 @@ public class UserService : IUserService
             }
 
             if (!await _usersRepository.ExistsAsync(x => x.Email == request.Content.Email))
-
             {
                 // Convert DTO to Entity
                 Users newUser = new Users
                 {
-                   
                     Email = request.Content.Email,
-                    PasswordHash = request.Content.Password,
-                    
+                    PasswordHash = PasswordHelper.HashPassword(request.Content.Password),
                 };
 
-                response.Content = await _usersRepository.CreateAsync(newUser);
+                var createdUser = await _usersRepository.CreateAsync(newUser);
+                if (createdUser == null) // Assuming your CreateAsync method returns null in case of failure.
+                {
+                    response.StatusCode = Enums.StatusCode.Conflict;
+                    response.Message = "User could not be created.";
+                    return response;
+                }
+
+                var tokenResponse = await _generateTokenService.CreateUserAndReturnToken(newUser);
+                if (tokenResponse.StatusCode != Enums.StatusCode.Ok)
+                {
+                    return new ServiceResponse<UserWithTokenResponse>
+                    {
+                        StatusCode = tokenResponse.StatusCode,
+                        Message = tokenResponse.Message
+                    };
+                }
+
+                response.Content = new UserWithTokenResponse
+                {
+                    User = createdUser,
+                    Token = tokenResponse.Content!
+                };
+
                 response.StatusCode = Enums.StatusCode.Created;
             }
             else
             {
                 response.StatusCode = Enums.StatusCode.Conflict;
-                response.Content = null;
+                response.Message = "User already exists.";
             }
         }
         catch (Exception ex)
@@ -85,6 +105,7 @@ public class UserService : IUserService
         return response;
     }
 
+
     public async Task<ServiceResponse<IEnumerable<Users>>> GetAllAsync()
     {
         var response = new ServiceResponse<IEnumerable<Users>>();
@@ -92,7 +113,7 @@ public class UserService : IUserService
         try
         {
             response.Content = await _usersRepository.GetAllAsync();
-            response.StatusCode = Enums.StatusCode.Success;
+            response.StatusCode = Enums.StatusCode.Ok;
         }
         catch (Exception ex)
         {
@@ -128,7 +149,7 @@ public class UserService : IUserService
             }
             else
             {
-                response.StatusCode = Enums.StatusCode.Success;
+                response.StatusCode = Enums.StatusCode.Ok;
             }
         }
         catch (Exception ex)
@@ -140,5 +161,72 @@ public class UserService : IUserService
 
         return response;
     }
+
+    public async Task<ServiceResponse<UserWithTokenResponse>> CreateGoogleUserAsync(ServiceRequest<OAuthRegistrationDTO> request)
+    {
+        var response = new ServiceResponse<UserWithTokenResponse>();
+
+        try
+        {
+            if (request.Content == null)
+            {
+                response.StatusCode = Enums.StatusCode.BadRequest;
+                response.Message = "Content cannot be null.";
+                return response;
+            }
+
+            if (!await _usersRepository.ExistsAsync(x => x.Email == request.Content.Email))
+            {
+                // Convert OAuthRegistrationDTO to Entity
+                Users newUser = new Users
+                {
+                    Email = request.Content.Email,
+                    OAuthId = request.Content.OAuthId,
+                    OAuthProvider = request.Content.OAuthProvider,
+                    PasswordHash = "GoogleUserPWD",
+                };
+
+                var createdUser = await _usersRepository.CreateAsync(newUser);
+                if (createdUser == null) // Assuming your CreateAsync method returns null in case of failure.
+                {
+                    response.StatusCode = Enums.StatusCode.Conflict;
+                    response.Message = "User could not be created.";
+                    return response;
+                }
+
+                var tokenResponse = await _generateTokenService.CreateUserAndReturnToken(newUser);
+                if (tokenResponse.StatusCode != Enums.StatusCode.Ok)
+                {
+                    return new ServiceResponse<UserWithTokenResponse>
+                    {
+                        StatusCode = tokenResponse.StatusCode,
+                        Message = tokenResponse.Message
+                    };
+                }
+
+                response.Content = new UserWithTokenResponse
+                {
+                    User = createdUser,
+                    Token = tokenResponse.Content!
+                };
+
+                response.StatusCode = Enums.StatusCode.Created;
+            }
+            else
+            {
+                response.StatusCode = Enums.StatusCode.Conflict;
+                response.Message = "User already exists.";
+            }
+        }
+        catch (Exception ex)
+        {
+            response.StatusCode = Enums.StatusCode.InternalServerError;
+            response.Message = ex.Message;
+        }
+
+        return response;
+    }
+
+
 
 }
