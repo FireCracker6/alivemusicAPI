@@ -30,11 +30,11 @@ public class GoogleTokenService : IGoogleTokenService
     private readonly IUserService _userService;
     private readonly HttpClient _httpClient;
 
-    public GoogleTokenService(IConfiguration configuration, IUserService userService, IHttpClientFactory httpClientFactory)
+    public GoogleTokenService(IConfiguration configuration, IUserService userService, HttpClient httpClient)
     {
         _configuration = configuration;
         _userService = userService;
-        _httpClient = httpClientFactory.CreateClient();
+        _httpClient = httpClient;
     }
 
     //public async Task<ServiceResponse<GoogleUser>> VerifyGoogleToken([FromBody] string token)

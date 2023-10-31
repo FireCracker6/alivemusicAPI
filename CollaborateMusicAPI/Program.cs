@@ -1,54 +1,84 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using CollaborateMusicAPI.Authentication;
 using CollaborateMusicAPI.Contexts;
 using CollaborateMusicAPI.Repositories;
 using CollaborateMusicAPI.Services;
+using Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
+
+using Microsoft.AspNetCore.Identity;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-
-// Add services to the container.
-builder.Services.AddTransient<IUsersRepository, UsersRepository>();   
+builder.Services.AddTransient<IUsersRepository, UsersRepository>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IExternalAuthService, ExternalAuthService>();
+
 builder.Services.AddHttpClient<IGoogleTokenService, GoogleTokenService>();
-builder.Services.AddScoped<IGoogleTokenService, GoogleTokenService>();
-builder.Services.AddScoped<GenerateTokenService>();
+builder.Services.AddTransient<GenerateTokenService>();
 
 
-builder.Services.AddHttpClient();
-
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie()
-    .AddGoogle(options =>
-    {
-        options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-        options.ClientSecret =builder.Configuration["Authentication:Google:ClientSecret"];
-    });
-
-
-builder.Services.AddCors(options =>
+// Identity setup
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
-    options.AddPolicy("AllowAllOrigins",
-        builder =>
-        {
-            builder.WithOrigins("http://localhost:3000") // Adjust to your frontend's origin
-                   .AllowAnyHeader()
-                   .AllowAnyMethod();
-        });
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequiredLength = 8;
+    options.User.RequireUniqueEmail = true;
+})
+.AddEntityFrameworkStores<ApplicationDBContext>()
+.AddDefaultTokenProviders();
+
+// Authentication setup
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(jwtOptions =>
+{
+    jwtOptions.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = "https://localhost:7286",
+        ValidAudience = "https://localhost:7286",
+        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+})
+.AddCookie()
+.AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
 });
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
+
+builder.Services.AddCors(corsOptions =>
+{
+    corsOptions.AddPolicy("AllowAllOrigins",
+        policyBuilder =>
+        {
+            policyBuilder.WithOrigins("http://localhost:3000")
+                         .AllowAnyHeader()
+                         .AllowAnyMethod();
+        });
+});
 
 var app = builder.Build();
 

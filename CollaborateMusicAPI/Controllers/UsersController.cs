@@ -58,43 +58,6 @@ public class UsersController : ControllerBase
         }
     }
 
-    //[HttpPost("signup-google")]
-    //public async Task<IActionResult> AutenticateWithGoogle(TokenRequest request)
-    //{
-    //    Console.WriteLine($"Received request: {JsonConvert.SerializeObject(request)}");
-    //    var code = request.Code;
-    //    if (string.IsNullOrWhiteSpace(code))
-    //    {
-    //        return BadRequest("Authorization code is required.");
-    //    }
-
-    //    // Use the service to fetch, verify the token, and get the Google user.
-    //    var googleUserResponse = await _googleTokenService.GetGoogleUserFromCodeAsync(request);
-
-
-    //    if (googleUserResponse.StatusCode != Enums.StatusCode.Ok || googleUserResponse.Content == null)
-    //    {
-    //     return BadRequest(new { error = "Invalid Google Token." });
-
-    //    }
-
-    //    var googleUser = googleUserResponse.Content;
-
-    //    var existingUserResponse = await _userService.GetUserByEmailAsync(googleUser.Email);
-    //    if (existingUserResponse.StatusCode == Enums.StatusCode.Ok && existingUserResponse.Content != null)
-    //    {
-    //        return Ok(existingUserResponse.Content);
-    //    }
-
-    //    // If user does not exist, create a new user.
-    //    var newUserResponse = await _googleTokenService.CreateGoogleUserAsync(googleUser);
-    //    if (newUserResponse.StatusCode == Enums.StatusCode.Created)
-    //    {
-    //        return CreatedAtAction(nameof(AutenticateWithGoogle), newUserResponse.Content);
-    //    }
-
-    //    return BadRequest("Could not create user!"); // Or some other appropriate response.
-    //}
     [HttpPost("signup-google")]
     public IActionResult SignUpGoogle([FromBody] TokenRequest request)
     {

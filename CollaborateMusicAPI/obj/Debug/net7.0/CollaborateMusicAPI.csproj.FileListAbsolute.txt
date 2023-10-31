@@ -86,3 +86,10 @@ C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicA
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\obj\Debug\net7.0\ref\CollaborateMusicAPI.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\System.Net.Http.Formatting.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Newtonsoft.Json.Bson.dll
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\System.Management.dll
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Management.dll

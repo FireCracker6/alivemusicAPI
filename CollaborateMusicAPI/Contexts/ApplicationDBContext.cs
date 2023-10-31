@@ -1,9 +1,10 @@
 ﻿using CollaborateMusicAPI.Models.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CollaborateMusicAPI.Contexts;
 
-public class ApplicationDBContext : DbContext
+public class ApplicationDBContext : IdentityDbContext<ApplicationUser>
 {
 
     public ApplicationDBContext()
