@@ -1,5 +1,8 @@
-﻿using System.Security.Claims;
+﻿using System.Diagnostics;
+using System.Security.Claims;
 using CollaborateMusicAPI.Contexts;
+using Google.Apis.Auth.OAuth2;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,33 +14,44 @@ namespace CollaborateMusicAPI.Controllers;
 public class AccountController : ControllerBase
 {
     private readonly ApplicationDBContext _context;
+    private readonly ILogger<AccountController> _logger;
 
-    public AccountController(ApplicationDBContext context)
+    public AccountController(ApplicationDBContext context, ILogger<AccountController> logger)
     {
         _context = context;
+        _logger = logger;
     }
 
-    [HttpGet("getuserinfo")]
-    public IActionResult GetUserInfo()
-    {
-        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdString)) return Unauthorized();
 
-        int userId;
-        if (!int.TryParse(userIdString, out userId))
+    [HttpGet("getuserinfo")]
+    [Authorize]
+    public async Task<IActionResult> GetUserInfo()
+    {
+        var headers = Request.Headers;
+        foreach (var header in headers)
+        {
+            _logger.LogInformation($"{header.Key}: {header.Value}");
+        }
+        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        Debug.WriteLine($"User ID: {userIdString}");
+      //  if (string.IsNullOrEmpty(userIdString)) return Unauthorized();
+
+        if (!Guid.TryParse(userIdString, out var userId))
         {
             return BadRequest("Invalid user ID format");
         }
 
-        var user = _context.Users.Find(userId);
+        var user = await _context.Users.FindAsync(userId); // Use FindAsync for async operation
         if (user == null) return NotFound();
 
         return Ok(new
         {
-            user.Email,
+            user.Email
+            // Include other user details you want to return
         });
-
     }
+
+
     [HttpGet("user")]
     public async Task<IActionResult> GetUserByEmail([FromQuery] string email)
     {
@@ -54,7 +68,7 @@ public class AccountController : ControllerBase
         {
             user.Id,
             user.Email,
-            fullName = "John Doe"
+            fullName = user.Email
         });
     }
 }

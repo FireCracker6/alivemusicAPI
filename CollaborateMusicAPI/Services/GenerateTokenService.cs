@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Text;
 using CollaborateMusicAPI.Authentication;
+using CollaborateMusicAPI.Contexts;
 using CollaborateMusicAPI.Models;
 using CollaborateMusicAPI.Models.Entities;
 using Microsoft.Extensions.Options;
@@ -20,18 +21,17 @@ public class GenerateTokenService
 
     public string GenerateJWTForUser(string userId)
     {
-
         var secret = _jwtSettings.Value.Key;
-        var secretKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secret));
+        // If your secret is base64 encoded in the configuration, decode it
+        var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secret)) { KeyId = "Your Key Id" };
+        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
 
-
-        var signinCredentials = new SigningCredentials(secretKey, "HS256");
-
+        var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
         var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.NameIdentifier, userId)
-        };
+    {
+        new Claim(ClaimTypes.NameIdentifier, userId)
+    };
 
         var tokenOptions = new JwtSecurityToken(
                        issuer: "https://localhost:7286",
@@ -40,11 +40,13 @@ public class GenerateTokenService
                        expires: DateTime.Now.AddMinutes(5),
                        signingCredentials: signinCredentials
                    );
+
         var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
         return tokenString;
     }
 
-    public Task<ServiceResponse<string>> CreateUserAndReturnToken(Users newUser)
+
+    public Task<ServiceResponse<string>> CreateUserAndReturnToken(ApplicationUser newUser)
     {
         var token = GenerateJWTForUser(newUser.Id.ToString());
         return Task.FromResult(new ServiceResponse<string>

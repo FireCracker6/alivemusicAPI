@@ -1,4 +1,6 @@
-﻿namespace CollaborateMusicAPI.Models.Entities
+﻿using CollaborateMusicAPI.Contexts;
+
+namespace CollaborateMusicAPI.Models.Entities
 {
     public class UserProfile
     {
@@ -9,8 +11,8 @@
         public string? Location { get; set; }
         public string? WebsiteURL { get; set; }
 
-        public int UserID { get; set; }
-        public virtual Users User { get; set; } = null!;
+        public Guid UserID { get; set; }
+        public virtual ApplicationUser User { get; set; } = null!;
         public virtual ICollection<Artist> Artists { get; set; } = null!;
 
     }

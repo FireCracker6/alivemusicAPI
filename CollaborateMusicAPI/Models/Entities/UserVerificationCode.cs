@@ -1,4 +1,6 @@
-﻿namespace CollaborateMusicAPI.Models.Entities;
+﻿using CollaborateMusicAPI.Contexts;
+
+namespace CollaborateMusicAPI.Models.Entities;
 
 
 public enum VerificationType
@@ -16,5 +18,6 @@ public class UserVerificationCode
     public DateTime ExpiryDate { get; set; }
     public VerificationType Type { get; set; }
 
-    public virtual Users Users { get; set; } = null!;
+
+    public virtual ApplicationUser User { get; set; } = null!;
 }

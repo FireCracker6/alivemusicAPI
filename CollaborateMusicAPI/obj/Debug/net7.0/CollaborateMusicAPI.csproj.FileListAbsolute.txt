@@ -13,9 +13,12 @@ C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicA
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Google.Apis.Auth.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Google.Apis.Core.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Humanizer.dll
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\System.Net.Http.Formatting.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.Google.dll
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Cryptography.Internal.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.AspNetCore.OpenApi.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.Data.SqlClient.dll
@@ -26,6 +29,9 @@ C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicA
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.SqlServer.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.Extensions.DependencyModel.dll
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.Identity.Client.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.Identity.Client.Extensions.Msal.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.IdentityModel.Abstractions.dll
@@ -39,6 +45,7 @@ C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicA
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Mono.TextTemplating.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Newtonsoft.Json.dll
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Newtonsoft.Json.Bson.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -46,6 +53,7 @@ C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicA
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\System.Configuration.ConfigurationManager.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\System.Drawing.Common.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\System.Management.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\System.Memory.Data.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\System.Runtime.Caching.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\System.Security.Cryptography.ProtectedData.dll
@@ -60,6 +68,7 @@ C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicA
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Management.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
@@ -84,12 +93,3 @@ C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicA
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\obj\Debug\net7.0\CollaborateMusicAPI.pdb
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\obj\Debug\net7.0\CollaborateMusicAPI.genruntimeconfig.cache
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\obj\Debug\net7.0\ref\CollaborateMusicAPI.dll
-C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\System.Net.Http.Formatting.dll
-C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Newtonsoft.Json.Bson.dll
-C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
-C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
-C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.Extensions.Identity.Core.dll
-C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.Extensions.Identity.Stores.dll
-C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
-C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\System.Management.dll
-C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Management.dll

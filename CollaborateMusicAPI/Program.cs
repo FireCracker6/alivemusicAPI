@@ -13,6 +13,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 using Microsoft.Extensions.Configuration;
+using CollaborateMusicAPI.Authorization;
+using Microsoft.OpenApi.Models;
+using System.Security.Claims;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,13 +30,55 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 builder.Services.AddTransient<IUsersRepository, UsersRepository>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IExternalAuthService, ExternalAuthService>();
+builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddScoped<IPasswordHasher<ApplicationUser>, BCryptPasswordHasher<ApplicationUser>>();
+builder.Services.AddSingleton<ITokenValidationService, TokenValidationService>();
+
+
 
 builder.Services.AddHttpClient<IGoogleTokenService, GoogleTokenService>();
 builder.Services.AddTransient<GenerateTokenService>();
 
+builder.Services.Configure<IdentityOptions>(options =>
+     options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier);
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme.",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
+                Scheme = "oauth2",
+                Name = "Bearer",
+                In = ParameterLocation.Header
+            },
+            new List<string>()
+        }
+    });
+});
+
+
 
 // Identity setup
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+// Identity setup
+builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
     options.Password.RequiredLength = 8;
@@ -41,25 +87,63 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<ApplicationDBContext>()
 .AddDefaultTokenProviders();
 
-// Authentication setup
+// DbContext registration
+builder.Services.AddDbContext<ApplicationDBContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        var serviceProvider = builder.Services.BuildServiceProvider();
+        var tokenValidationService = serviceProvider.GetRequiredService<ITokenValidationService>();
+        options.TokenValidationParameters = tokenValidationService.GetTokenValidationParameters();
+        // Additional configuration...
+    });
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-.AddJwtBearer(jwtOptions =>
-{
-    jwtOptions.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = "https://localhost:7286",
-        ValidAudience = "https://localhost:7286",
-        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-    };
-})
+ 
+//.AddJwtBearer(jwtOptions =>
+//{
+//    jwtOptions.Events = new JwtBearerEvents
+//    {
+//        OnTokenValidated = context =>
+//        {
+//            var claims = context.Principal.Claims;
+//            foreach (var claim in claims)
+//            {
+//                Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
+//            }
+//            return Task.CompletedTask;
+//        },
+//        OnMessageReceived = context =>
+//        {
+//            Console.WriteLine($"Token received: {context.Token}");
+//            return Task.CompletedTask;
+//        },
+//        OnAuthenticationFailed = context =>
+//        {
+//            Console.WriteLine($"Authentication failed: {context.Exception.Message}");
+//            return Task.CompletedTask;
+//        }
+//    };
+//    jwtOptions.TokenValidationParameters = new TokenValidationParameters
+//    {
+//        ValidateIssuer = true,
+//        ValidateAudience = true,
+//        ValidateLifetime = true,
+//        ValidateIssuerSigningKey = true,
+//        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+//        ValidAudience = builder.Configuration["Jwt:Audience"],
+        
+//    };
+//})
 .AddCookie()
 .AddGoogle(googleOptions =>
 {

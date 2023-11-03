@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CollaborateMusicAPI.Repositories;
 
-public interface IUsersRepository : IRepository<Users, ApplicationDBContext>
+public interface IUsersRepository : IRepository<ApplicationUser, ApplicationDBContext>
 {
-    Task<Users?> GetUserByEmailAsync(string email);
+    Task<ApplicationUser?> GetUserByEmailAsync(string email);
 }
 
 
-public class UsersRepository : Repository<Users, ApplicationDBContext>, IUsersRepository
+public class UsersRepository : Repository<ApplicationUser, ApplicationDBContext>, IUsersRepository
 {
     
 
@@ -19,13 +19,14 @@ public class UsersRepository : Repository<Users, ApplicationDBContext>, IUsersRe
     {
       
     }
-    public async Task<Users?> GetUserByEmailAsync(string email)
+    public async Task<ApplicationUser?> GetUserByEmailAsync(string email)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.Trim() == email.Trim());
         Debug.WriteLine($"Searched for email: {email}. Found: {user?.Email ?? "No user found"}");
         return user;
     }
-   
 
-    
+
+
+
 }

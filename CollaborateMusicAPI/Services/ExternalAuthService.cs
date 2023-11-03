@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using CollaborateMusicAPI.Contexts;
 using CollaborateMusicAPI.Models;
 using CollaborateMusicAPI.Models.DTOs;
 using CollaborateMusicAPI.Models.Entities;
@@ -9,7 +10,7 @@ namespace CollaborateMusicAPI.Services;
 
 public interface IExternalAuthService
 {
-    Task<ServiceResponse<Users>> AuthenticateWithGoogleAsync(string code);
+    Task<ServiceResponse<ApplicationUser>> AuthenticateWithGoogleAsync(string code);
 }
 
 public class ExternalAuthService : IExternalAuthService
@@ -25,15 +26,17 @@ public class ExternalAuthService : IExternalAuthService
         _httpClientFactory = httpClientFactory;
     }
 
-    public async Task<ServiceResponse<Users>> AuthenticateWithGoogleAsync(string code)
+    public async Task<ServiceResponse<ApplicationUser>> AuthenticateWithGoogleAsync(string code)
     {
         var tokenResponse = await GetGoogleTokensAsync(code);
         var googleUser = DecodeGoogleIdToken(tokenResponse.IdToken);
 
-        var existingUser = await _userService.GetUserByEmailAsync(googleUser.Email);
+        var response = await _userService.GetUserByEmailAsync(googleUser.Email);
+        var existingUser = response.Content;
+
         if (existingUser != null)
         {
-            return new ServiceResponse<Users>
+            return new ServiceResponse<ApplicationUser>
             {
                 StatusCode = Enums.StatusCode.Ok,
                 Content = existingUser
@@ -50,7 +53,7 @@ public class ExternalAuthService : IExternalAuthService
 
         await _userService.CreateAsync(new ServiceRequest<UserRegistrationDto> { Content = newUserDto });
 
-        var newUserEntity = new Users
+        var newUserEntity = new ApplicationUser
         {
             Email = newUserDto.Email,
             OAuthId = newUserDto.OAuthId,
@@ -58,7 +61,7 @@ public class ExternalAuthService : IExternalAuthService
          
         };
 
-        return new ServiceResponse<Users>
+        return new ServiceResponse<ApplicationUser>
         {
             Content = newUserEntity,
             StatusCode = Enums.StatusCode.Created

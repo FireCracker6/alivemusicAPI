@@ -25,7 +25,7 @@ public class UserRepository_Tests
     public async Task CreateAsync_ShouldCreateUser()
     {
         // Arrange
-        var user = new Users
+        var user = new ApplicationUser
         {
             Email = "testuser@example.com",
             PasswordHash = "BytMig123!",
@@ -39,7 +39,7 @@ public class UserRepository_Tests
 
         // Assert
         Assert.NotNull(result);
-        Assert.IsType<Users>(result);
+        Assert.IsType<ApplicationUser>(result);
         Assert.Equal(user.Email, result.Email);
         
        
@@ -50,7 +50,7 @@ public class UserRepository_Tests
     public async Task ExistsAsync_Should_ReturnTrue_WhenEntityAlreadyExists()
     {
         // Arrange
-        var user = new Users
+        var user = new ApplicationUser
         {
             Email = "testuser@example.com",
             PasswordHash = "BytMig123!",
@@ -73,7 +73,7 @@ public class UserRepository_Tests
     public async Task ExistsAsync_Should_ReturnFalse_WhenEntityAlreadyExists()
     {
         // Arrange
-        var user = new Users
+        var user = new ApplicationUser
         {
             Email = "testuser@example.com",
             PasswordHash = "BytMig123!",

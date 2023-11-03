@@ -1,20 +1,21 @@
 ﻿using CollaborateMusicAPI.Models.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CollaborateMusicAPI.Contexts;
 
-public class ApplicationDBContext : IdentityDbContext<ApplicationUser>
+public class ApplicationDBContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
 {
-
     public ApplicationDBContext()
     {
     }
+
     public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
     {
     }
 
-    public DbSet<Users> Users { get; set; }
+
     public DbSet<UserProfile> UserProfiles { get; set; }
     public DbSet<Artist> Artists { get; set; }
     public DbSet<Album> Albums { get; set; }
@@ -25,40 +26,16 @@ public class ApplicationDBContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Users>()
+        modelBuilder.Entity<ApplicationUser>()
             .HasIndex(u => u.Email)
             .IsUnique();
+        modelBuilder.Entity<UserProfile>()
+            .HasOne(p => p.User)
+            .WithOne(u => u.UserProfile)
+            .HasForeignKey<UserProfile>(p => p.UserID)
+            .IsRequired();
 
-        modelBuilder.Entity<Users>()
-            .HasOne(u => u.UserProfile)
-            .WithOne(p => p.User)
-            .HasForeignKey<UserProfile>(p => p.UserID);
 
-        modelBuilder.Entity<Users>().HasData(
-            new Users
-            {
-                Id = 1,
-                Email = "testuser@example.com",
-                PasswordHash = "TestPasswordHash",
-                OAuthId = "OauthTest",
-                OAuthProvider = "TestProvider",
-                CreatedDate = DateTime.UtcNow
-            }
-          );
-
-       modelBuilder.Entity<UserProfile>().HasData(
-                      new UserProfile
-                      {
-                UserProfileID = 1,
-                FullName = "Test User",
-                Bio = "This is a test bio.",
-                ProfilePicturePath = null,
-                Location = "Test City",
-                WebsiteURL = "https://example.com",
-                UserID = 1
-            }
-                             );
-   
     }
-    
+
 }

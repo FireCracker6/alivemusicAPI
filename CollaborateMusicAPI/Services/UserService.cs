@@ -1,10 +1,13 @@
 ﻿using System.Diagnostics;
 using CollaborateMusicAPI.Authentication;
 using CollaborateMusicAPI.Authorization;
+using CollaborateMusicAPI.Contexts;
 using CollaborateMusicAPI.Models;
 using CollaborateMusicAPI.Models.DTOs;
 using CollaborateMusicAPI.Models.Entities;
 using CollaborateMusicAPI.Repositories;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace CollaborateMusicAPI.Services;
 
@@ -12,9 +15,13 @@ public interface IUserService
 {
     Task<ServiceResponse<UserWithTokenResponse>> CreateAsync(ServiceRequest<UserRegistrationDto> request);
     Task<ServiceResponse<UserWithTokenResponse>> CreateGoogleUserAsync(ServiceRequest<OAuthRegistrationDTO> request);
-    Task<ServiceResponse<Users>> GetUserByEmailAsync(string email);
-    Task<ServiceResponse<IEnumerable<Users>>> GetAllAsync();
-   
+    Task<ServiceResponse<ApplicationUser>> GetUserByEmailAsync(string email);
+    Task<ServiceResponse<IEnumerable<ApplicationUser>>> GetAllAsync();
+    Task<ServiceResponse<UserLoginDto>> LoginAsync(UserLoginDto loginDto);
+
+
+
+
     //Task<ServiceResponse<Users>> UpdateUserAsync(int id, ServiceRequest<UserUpdateDto> request);
     //Task<ServiceResponse<Users>> DeleteUserAsync(int id);
     //Task<ServiceResponse<Users>> UpdatePasswordAsync(int id, ServiceRequest<UserUpdatePasswordDto> request);
@@ -30,14 +37,18 @@ public class UserService : IUserService
 {
     private readonly IUsersRepository _usersRepository;
     private readonly GenerateTokenService _generateTokenService;
+    private readonly ITokenService _tokenService;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public UserService(IUsersRepository usersRepository, GenerateTokenService generateTokenService)
+    public UserService(IUsersRepository usersRepository, GenerateTokenService generateTokenService, ITokenService tokenService, UserManager<ApplicationUser> userManager)
     {
         _usersRepository = usersRepository;
         _generateTokenService = generateTokenService;
+        _tokenService = tokenService;
+        _userManager = userManager;
     }
 
-    public async Task<Users> CreateAccount(Users user)
+    public async Task<ApplicationUser> CreateAccount(ApplicationUser user)
     {
         return await _usersRepository.CreateAsync(user);
     }
@@ -55,46 +66,50 @@ public class UserService : IUserService
                 return response;
             }
 
-            if (!await _usersRepository.ExistsAsync(x => x.Email == request.Content.Email))
-            {
-                // Convert DTO to Entity
-                Users newUser = new Users
-                {
-                    Email = request.Content.Email,
-                    PasswordHash = PasswordHelper.HashPassword(request.Content.Password),
-                };
-
-                var createdUser = await _usersRepository.CreateAsync(newUser);
-                if (createdUser == null) // Assuming your CreateAsync method returns null in case of failure.
-                {
-                    response.StatusCode = Enums.StatusCode.Conflict;
-                    response.Message = "User could not be created.";
-                    return response;
-                }
-
-                var tokenResponse = await _generateTokenService.CreateUserAndReturnToken(newUser);
-                if (tokenResponse.StatusCode != Enums.StatusCode.Ok)
-                {
-                    return new ServiceResponse<UserWithTokenResponse>
-                    {
-                        StatusCode = tokenResponse.StatusCode,
-                        Message = tokenResponse.Message
-                    };
-                }
-
-                response.Content = new UserWithTokenResponse
-                {
-                    User = createdUser,
-                    Token = tokenResponse.Content!
-                };
-
-                response.StatusCode = Enums.StatusCode.Created;
-            }
-            else
+            // Use UserManager to check if user exists and create the user
+            var userExists = await _userManager.FindByEmailAsync(request.Content.Email);
+            if (userExists != null)
             {
                 response.StatusCode = Enums.StatusCode.Conflict;
                 response.Message = "User already exists.";
+                return response;
             }
+
+            ApplicationUser newUser = new ApplicationUser
+            {
+                UserName = request.Content.Email,
+                Email = request.Content.Email,
+                // Set other required fields as needed
+                EmailConfirmed = true // Usually, you would want to send a confirmation email to set this to true
+            };
+
+            var result = await _userManager.CreateAsync(newUser, request.Content.Password);
+            if (!result.Succeeded)
+            {
+                response.StatusCode = Enums.StatusCode.Conflict;
+                response.Message = "User could not be created.";
+                return response;
+            }
+
+            // Generate token after successful creation
+            var tokenResponse = await _generateTokenService.CreateUserAndReturnToken(newUser);
+            if (tokenResponse.StatusCode != Enums.StatusCode.Ok)
+            {
+                // Ideally, you might want to rollback user creation if token generation fails
+                return new ServiceResponse<UserWithTokenResponse>
+                {
+                    StatusCode = tokenResponse.StatusCode,
+                    Message = tokenResponse.Message
+                };
+            }
+
+            response.Content = new UserWithTokenResponse
+            {
+                User = newUser,
+                Token = tokenResponse.Content!
+            };
+
+            response.StatusCode = Enums.StatusCode.Created;
         }
         catch (Exception ex)
         {
@@ -106,9 +121,10 @@ public class UserService : IUserService
     }
 
 
-    public async Task<ServiceResponse<IEnumerable<Users>>> GetAllAsync()
+
+    public async Task<ServiceResponse<IEnumerable<ApplicationUser>>> GetAllAsync()
     {
-        var response = new ServiceResponse<IEnumerable<Users>>();
+        var response = new ServiceResponse<IEnumerable<ApplicationUser>>();
 
         try
         {
@@ -126,9 +142,9 @@ public class UserService : IUserService
     }
 
 
-    public async Task<ServiceResponse<Users>> GetUserByEmailAsync(string email)
+    public async Task<ServiceResponse<ApplicationUser>> GetUserByEmailAsync(string email)
     {
-        var response = new ServiceResponse<Users>();
+        var response = new ServiceResponse<ApplicationUser>();
 
         try
         {
@@ -178,7 +194,7 @@ public class UserService : IUserService
             if (!await _usersRepository.ExistsAsync(x => x.Email == request.Content.Email))
             {
                 // Convert OAuthRegistrationDTO to Entity
-                Users newUser = new Users
+                ApplicationUser newUser = new ApplicationUser
                 {
                     Email = request.Content.Email,
                     OAuthId = request.Content.OAuthId,
@@ -225,6 +241,47 @@ public class UserService : IUserService
         }
 
         return response;
+    }
+
+    public async Task<ServiceResponse<UserLoginDto>> LoginAsync(UserLoginDto loginDto)
+    {
+        var userResponse = await GetUserByEmailAsync(loginDto.Email);
+        var user = userResponse.Content;
+
+        if (user == null || !VerifyPassword(loginDto.Password, user.PasswordHash))
+        {
+            return new ServiceResponse<UserLoginDto>
+            {
+                StatusCode = Enums.StatusCode.Unauthorized,
+                Message = "Invalid email or password"
+            };
+        }
+
+        var token = await _tokenService.GetTokenAsync(user.Email, loginDto.Password, false);  // Assuming 'false' for 'isRememberMe'.
+        if (string.IsNullOrEmpty(token))
+        {
+            return new ServiceResponse<UserLoginDto>
+            {
+                StatusCode = Enums.StatusCode.Unauthorized,
+                Message = "Failed to generate a token"
+            };
+        }
+
+        // Modify UserLoginDto to include the JWT token (and possibly refresh token)
+        loginDto.JwtToken = token;
+        // loginDto.RefreshToken = refreshToken;  // If you decide to also return the refresh token
+
+        return new ServiceResponse<UserLoginDto>
+        {
+            Content = loginDto,
+            StatusCode = Enums.StatusCode.Ok
+        };
+    }
+
+
+    private bool VerifyPassword(string password, string storedHash)
+    {
+        return PasswordHelper.VerifyPassword(password, storedHash);
     }
 
 
