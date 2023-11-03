@@ -1,4 +1,5 @@
-﻿using CollaborateMusicAPI.Models.Entities;
+﻿using CollaborateMusicAPI.Models;
+using CollaborateMusicAPI.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ public class ApplicationDBContext : IdentityDbContext<ApplicationUser, IdentityR
     public DbSet<Album> Albums { get; set; }
     public DbSet<Track> Tracks { get; set; }
     public DbSet<UserVerificationCode> UserVerificationCodes { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -34,6 +36,14 @@ public class ApplicationDBContext : IdentityDbContext<ApplicationUser, IdentityR
             .WithOne(u => u.UserProfile)
             .HasForeignKey<UserProfile>(p => p.UserID)
             .IsRequired();
+
+
+        modelBuilder.Entity<RefreshToken>()
+             .HasOne(rt => rt.User)
+             .WithMany(u => u.RefreshTokens)
+             .HasForeignKey(rt => rt.UserId);
+
+
 
 
     }

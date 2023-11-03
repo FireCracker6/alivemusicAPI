@@ -34,14 +34,14 @@ public class AccountController : ControllerBase
         }
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         Debug.WriteLine($"User ID: {userIdString}");
-      //  if (string.IsNullOrEmpty(userIdString)) return Unauthorized();
+        if (string.IsNullOrEmpty(userIdString)) return Unauthorized();
 
         if (!Guid.TryParse(userIdString, out var userId))
         {
             return BadRequest("Invalid user ID format");
         }
 
-        var user = await _context.Users.FindAsync(userId); // Use FindAsync for async operation
+        var user = await _context.Users.FindAsync(userId); 
         if (user == null) return NotFound();
 
         return Ok(new

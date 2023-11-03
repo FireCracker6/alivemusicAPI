@@ -8,6 +8,7 @@ using CollaborateMusicAPI.Models.Entities;
 using CollaborateMusicAPI.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 
 namespace CollaborateMusicAPI.Services;
 
@@ -243,6 +244,40 @@ public class UserService : IUserService
         return response;
     }
 
+    //public async Task<ServiceResponse<UserLoginDto>> LoginAsync(UserLoginDto loginDto)
+    //{
+    //    var userResponse = await GetUserByEmailAsync(loginDto.Email);
+    //    var user = userResponse.Content;
+
+    //    if (user == null || !VerifyPassword(loginDto.Password, user.PasswordHash))
+    //    {
+    //        return new ServiceResponse<UserLoginDto>
+    //        {
+    //            StatusCode = Enums.StatusCode.Unauthorized,
+    //            Message = "Invalid email or password"
+    //        };
+    //    }
+
+    //    var token = await _tokenService.GetTokenAsync(user.Email, loginDto.Password, false);  // Assuming 'false' for 'isRememberMe'.
+    //    if (string.IsNullOrEmpty(token))
+    //    {
+    //        return new ServiceResponse<UserLoginDto>
+    //        {
+    //            StatusCode = Enums.StatusCode.Unauthorized,
+    //            Message = "Failed to generate a token"
+    //        };
+    //    }
+
+    //    // Modify UserLoginDto to include the JWT token (and possibly refresh token)
+    //    loginDto.JwtToken = token;
+    //    // loginDto.RefreshToken = refreshToken;  // If you decide to also return the refresh token
+
+    //    return new ServiceResponse<UserLoginDto>
+    //    {
+    //        Content = loginDto,
+    //        StatusCode = Enums.StatusCode.Ok
+    //    };
+    //}
     public async Task<ServiceResponse<UserLoginDto>> LoginAsync(UserLoginDto loginDto)
     {
         var userResponse = await GetUserByEmailAsync(loginDto.Email);
@@ -257,8 +292,10 @@ public class UserService : IUserService
             };
         }
 
-        var token = await _tokenService.GetTokenAsync(user.Email, loginDto.Password, false);  // Assuming 'false' for 'isRememberMe'.
-        if (string.IsNullOrEmpty(token))
+        // Since TokenService is already generating a refresh token, retrieve it
+        // Since TokenService is now returning a UserWithTokenResponse object, retrieve it
+        var tokenResponse = await _tokenService.GetTokenAsync(user.Email, loginDto.Password, loginDto.RememberMe ?? false);
+        if (tokenResponse == null || string.IsNullOrEmpty(tokenResponse.Token))
         {
             return new ServiceResponse<UserLoginDto>
             {
@@ -267,16 +304,19 @@ public class UserService : IUserService
             };
         }
 
-        // Modify UserLoginDto to include the JWT token (and possibly refresh token)
-        loginDto.JwtToken = token;
-        // loginDto.RefreshToken = refreshToken;  // If you decide to also return the refresh token
+        // Now that we have a token response object, we can extract the tokens from it
+        loginDto.JwtToken = tokenResponse.Token;
+        loginDto.RefreshToken = tokenResponse.RefreshToken;
 
         return new ServiceResponse<UserLoginDto>
         {
             Content = loginDto,
             StatusCode = Enums.StatusCode.Ok
         };
+
     }
+
+
 
 
     private bool VerifyPassword(string password, string storedHash)

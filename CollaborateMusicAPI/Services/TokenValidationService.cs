@@ -22,14 +22,11 @@ public class TokenValidationService : ITokenValidationService
 
     public TokenValidationParameters GetTokenValidationParameters()
     {
-        // This delegate will be used to resolve a key during the validation process
-        // given the 'kid' value from the incoming token.
+
         SecurityKey ResolveKey(string tokenKid)
         {
-            // Replace with your logic to retrieve the key for the given 'kid'
-            // For instance, this could be a lookup from a dictionary, database, or an API call
-            // to a service that stores your signing keys.
-            if (tokenKid == "4b623c772ff94971e1b1bb0723b2a0cb") // "yourExpectedKeyId" should be replaced with actual expected 'kid'
+            
+            if (tokenKid == "4b623c772ff94971e1b1bb0723b2a0cb") 
             {
                 return new SymmetricSecurityKey(Encoding.UTF8.GetBytes("4b623c772ff94971e1b1bb0723b2a0cb"));
             }

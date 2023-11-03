@@ -27,7 +27,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddTransient<IUsersRepository, UsersRepository>();
+builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+builder.Services.AddScoped<RefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IExternalAuthService, ExternalAuthService>();
 builder.Services.AddTransient<ITokenService, TokenService>();

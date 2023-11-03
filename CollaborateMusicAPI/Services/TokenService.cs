@@ -8,8 +8,10 @@ using CollaborateMusicAPI.Authentication;
 using CollaborateMusicAPI.Contexts;
 using CollaborateMusicAPI.Controllers;
 using CollaborateMusicAPI.Models;
+using CollaborateMusicAPI.Models.DTOs;
 using CollaborateMusicAPI.Repositories;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 
@@ -17,15 +19,16 @@ namespace CollaborateMusicAPI.Services;
 
 public interface ITokenService
 {
-    Task<string> GetTokenAsync(string email, string password, bool isRememberMe);
+    Task<UserWithTokenResponse> GetTokenAsync(string email, string password, bool rememberme);
     Task<string> RefreshTokenAsync(string accessToken, string refreshToken);
-    Guid GetUserIdFromToken(string token); // Add this line
+    Guid GetUserIdFromToken(string token); 
   
 }
 
 public class TokenService : ITokenService
 {
     private readonly IUsersRepository _usersRepository;
+    private readonly RefreshTokenRepository _refreshTokenRepository;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ITokenValidationService _tokenValidationService;
@@ -34,7 +37,7 @@ public class TokenService : ITokenService
     private readonly ILogger<AccountController> _logger;
     private string keyId = "4b623c772ff94971e1b1bb0723b2a0cb";
 
-    public TokenService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IUsersRepository usersRepository, IConfiguration configuration, ILogger<AccountController> logger, ITokenValidationService tokenValidationService)
+    public TokenService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IUsersRepository usersRepository, IConfiguration configuration, ILogger<AccountController> logger, ITokenValidationService tokenValidationService, RefreshTokenRepository refreshTokenRepository)
     {
 
         _userManager = userManager;
@@ -44,9 +47,10 @@ public class TokenService : ITokenService
         _configuration = configuration;
         _logger = logger;
         _tokenValidationService = tokenValidationService;
+        _refreshTokenRepository = refreshTokenRepository;
     }
 
-    public async Task<string> GetTokenAsync(string email,  string password, bool isRememberMe)
+    public async Task<UserWithTokenResponse> GetTokenAsync(string email,  string password, bool rememberme)
     {
       
 
@@ -61,16 +65,29 @@ public class TokenService : ITokenService
 
             if (userName != null)
             {
-                // Depending on your setup, you might need to use user.UserName instead of user.Email
-                var result = await _signInManager.PasswordSignInAsync(userName, password, isRememberMe, false);
+           
+                var result = await _signInManager.PasswordSignInAsync(userName, password, rememberme, false);
 
                 if (result.Succeeded)
                 {
                     var token = GenerateAuthToken(user!.Email!, user.Id); // Generate the token
+                                                                          // Generate the refresh token string and create the RefreshToken entity
+                    var refreshTokenString = GenerateRefreshToken(user.Email, rememberme);
+                    // Create the refresh token entity
+                    var refreshTokenEntity = new RefreshToken
+                    {
+                        Token = refreshTokenString.ToString()!,
+                        Expires = DateTime.UtcNow.AddDays(rememberme ? 30 : 7),
+                        Created = DateTime.UtcNow,
+                        UserId = user.Id,
+                        RememberMe = rememberme
+                    };
 
+                    // Add the refresh token entity to the database using RefreshTokenRepository
+                    await _refreshTokenRepository.AddRefreshTokenAsync(refreshTokenEntity);
                     // Immediately validate the token
                     var tokenHandler = new JwtSecurityTokenHandler();
-                    var validationParameters = _tokenValidationService.GetTokenValidationParameters(); // Your existing validation parameters
+                    var validationParameters = _tokenValidationService.GetTokenValidationParameters(); 
 
                     try
                     {
@@ -86,11 +103,16 @@ public class TokenService : ITokenService
                     }
 
                     // If the token is valid, then you can proceed to issue it to the client
-                    var refreshToken = GenerateRefreshToken();
-                    user.RefreshToken = refreshToken;
+                 
                     await _userManager.UpdateAsync(user);
 
-                    return token;
+                    return new UserWithTokenResponse
+                    {
+                        User = user, // Assuming you want to send the user info back as well
+                        Token = token, // This should match the property name in your UserWithTokenResponse class
+                        RefreshToken = refreshTokenString.ToString()! // Send the refresh token string to the client
+                    };
+
                 }
                 else
 {
@@ -144,19 +166,38 @@ public class TokenService : ITokenService
 
         var user = await _userManager.FindByIdAsync(userId.ToString());
 
-        if (user == null || user.RefreshToken != refreshToken)
+        if (user == null)
         {
-            throw new Exception("Invalid refresh token.");
+            throw new Exception("User does not exist.");
         }
 
+        // Find the matching refresh token in the user's collection of refresh tokens.
+        var refreshTokenEntity = user.RefreshTokens.SingleOrDefault(rt => rt.Token == refreshToken);
+
+        if (refreshTokenEntity == null || refreshTokenEntity.IsRevoked)
+        {
+            throw new Exception("Invalid or revoked refresh token.");
+        }
+
+        // Now you can access the RememberMe property from the refreshTokenEntity
+        var rememberMe = refreshTokenEntity.RememberMe;
         var newToken = GenerateAuthToken(email, userId); // Pass userId here
-        user.RefreshToken = GenerateRefreshToken();
-        await _userManager.UpdateAsync(user);
+
+        // Generate a new refresh token and update the refresh token entity as needed
+        var newRefreshTokenString = GenerateRefreshToken(user.Email!, rememberMe);
+        refreshTokenEntity.Token = newRefreshTokenString.ToString()!; // Update the token string
+        refreshTokenEntity.Expires = DateTime.UtcNow.AddDays(rememberMe ? 30 : 7); // Set new expiry
+
+        // No need to set user.RefreshToken as it is a collection now
+        // user.RefreshToken = newRefreshTokenString; // This line should be removed
+
+        // Update the refresh token entity in the database
+        await _usersRepository.SaveRefreshToken(refreshTokenEntity);
+        
 
         return newToken;
     }
 
-   
 
 
     private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
@@ -190,17 +231,17 @@ public class TokenService : ITokenService
     private string GenerateAuthToken(string email, Guid userId)
     {
          // Generates a new KeyId
-        _logger.LogInformation($"Key ID generated: {keyId}"); // Logs the KeyId
+        _logger.LogInformation($"Key ID generated: {keyId}"); 
 
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.UTF8.GetBytes(_securityKey); // This should be your secret key
+        var key = Encoding.UTF8.GetBytes(_securityKey); 
 
         if (key.Length < 16)
         {
             throw new InvalidOperationException("The key is too short.");
         }
 
-        // Here you assign the KeyId to the securityKey
+
         var securityKey = new SymmetricSecurityKey(key) { KeyId = "4b623c772ff94971e1b1bb0723b2a0cb" };
 
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -274,13 +315,30 @@ public class TokenService : ITokenService
     }
 
 
-    private string GenerateRefreshToken()
+    public async Task<string> GenerateRefreshToken(string email, bool rememberme)
     {
+        var user = await _usersRepository.GetUserByEmailAsync(email);
+        if (user == null)
+        {
+            throw new Exception("User not found.");
+        }
+
         var randomNumber = new byte[32];
         using var rng = RandomNumberGenerator.Create();
         rng.GetBytes(randomNumber);
-        return Convert.ToBase64String(randomNumber);
+        var refreshToken = new RefreshToken
+        {
+            Token = Convert.ToBase64String(randomNumber),
+            UserId = user.Id,
+            Expires = rememberme ? DateTime.UtcNow.AddDays(30) : DateTime.UtcNow.AddDays(7), // For example, 30 days if rememberMe is true, otherwise 7 days
+            Created = DateTime.UtcNow
+        };
+
+      //  await _usersRepository.SaveRefreshToken(refreshToken);
+
+        return refreshToken.Token;
     }
+
 }
 
 public class RefreshTokenRequest

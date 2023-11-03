@@ -1,4 +1,5 @@
-﻿using CollaborateMusicAPI.Models.Entities;
+﻿using CollaborateMusicAPI.Models;
+using CollaborateMusicAPI.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace CollaborateMusicAPI.Contexts
@@ -14,6 +15,8 @@ namespace CollaborateMusicAPI.Contexts
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
         public virtual UserProfile UserProfile { get; set; }
+
+        public virtual ICollection<RefreshToken> RefreshTokens { get; set; } = new HashSet<RefreshToken>();
     }
 
 

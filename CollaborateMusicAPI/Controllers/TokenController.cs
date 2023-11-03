@@ -21,15 +21,21 @@ public class TokenController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var token = await _tokenService.GetTokenAsync(model.Email, model.Password, (bool)model.IsRememberMe);
-        if (string.IsNullOrEmpty(token))
+        var tokenResponse = await _tokenService.GetTokenAsync(model.Email, model.Password, model.RememberMe ?? false);
+        if (tokenResponse == null || string.IsNullOrEmpty(tokenResponse.Token))
         {
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             return BadRequest(ModelState);
         }
 
-        return Ok(new { token });
+        // If you wish to send more data, consider creating a DTO that includes the refresh token and any other relevant information.
+        return Ok(new
+        {
+            token = tokenResponse.Token,
+            refreshToken = tokenResponse.RefreshToken
+        });
     }
+
 
     [HttpPost("refresh")]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
