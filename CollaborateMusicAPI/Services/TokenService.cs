@@ -21,8 +21,9 @@ public interface ITokenService
 {
     Task<UserWithTokenResponse> GetTokenAsync(string email, string password, bool rememberme);
     Task<string> RefreshTokenAsync(string accessToken, string refreshToken);
-    Guid GetUserIdFromToken(string token); 
-  
+    Guid GetUserIdFromToken(string token);
+    Task<string> CreateTokenAsync(string email, Guid userId);
+
 }
 
 public class TokenService : ITokenService
@@ -198,7 +199,12 @@ public class TokenService : ITokenService
         return newToken;
     }
 
-
+    public Task<string> CreateTokenAsync(string email, Guid userId)
+    {
+        // Since GenerateAuthToken is not an asynchronous method, you don't need to await it.
+        // Instead, you can directly return the Task.FromResult to wrap the result into a Task.
+        return Task.FromResult(GenerateAuthToken(email, userId));
+    }
 
     private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
     {
@@ -339,6 +345,7 @@ public class TokenService : ITokenService
         return refreshToken.Token;
     }
 
+   
 }
 
 public class RefreshTokenRequest
