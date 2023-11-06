@@ -23,15 +23,6 @@ public interface IUserService
 
 
 
-    //Task<ServiceResponse<Users>> UpdateUserAsync(int id, ServiceRequest<UserUpdateDto> request);
-    //Task<ServiceResponse<Users>> DeleteUserAsync(int id);
-    //Task<ServiceResponse<Users>> UpdatePasswordAsync(int id, ServiceRequest<UserUpdatePasswordDto> request);
-    //Task<ServiceResponse<Users>> UpdateEmailAsync(int id, ServiceRequest<UserUpdateEmailDto> request);
-    //Task<ServiceResponse<Users>> UpdateTwoFactorAsync(int id, ServiceRequest<UserUpdateTwoFactorDto> request);
-    //Task<ServiceResponse<Users>> UpdateOAuthAsync(int id, ServiceRequest<UserUpdateOAuthDto> request);
-    //Task<ServiceResponse<Users>> UpdateProfileAsync(int id, ServiceRequest<UserUpdateProfileDto> request);
-    //Task<ServiceResponse<Users>> UpdateProfileImageAsync(int id, ServiceRequest<UserUpdateProfileImageDto> request);
-    //Task<ServiceResponse<Users>> UpdateProfileBackgroundImageAsync(int id, ServiceRequest<UserUpdateProfileBackgroundImageDto> request);
 }
 
 public class UserService : IUserService
@@ -244,40 +235,7 @@ public class UserService : IUserService
         return response;
     }
 
-    //public async Task<ServiceResponse<UserLoginDto>> LoginAsync(UserLoginDto loginDto)
-    //{
-    //    var userResponse = await GetUserByEmailAsync(loginDto.Email);
-    //    var user = userResponse.Content;
-
-    //    if (user == null || !VerifyPassword(loginDto.Password, user.PasswordHash))
-    //    {
-    //        return new ServiceResponse<UserLoginDto>
-    //        {
-    //            StatusCode = Enums.StatusCode.Unauthorized,
-    //            Message = "Invalid email or password"
-    //        };
-    //    }
-
-    //    var token = await _tokenService.GetTokenAsync(user.Email, loginDto.Password, false);  // Assuming 'false' for 'isRememberMe'.
-    //    if (string.IsNullOrEmpty(token))
-    //    {
-    //        return new ServiceResponse<UserLoginDto>
-    //        {
-    //            StatusCode = Enums.StatusCode.Unauthorized,
-    //            Message = "Failed to generate a token"
-    //        };
-    //    }
-
-    //    // Modify UserLoginDto to include the JWT token (and possibly refresh token)
-    //    loginDto.JwtToken = token;
-    //    // loginDto.RefreshToken = refreshToken;  // If you decide to also return the refresh token
-
-    //    return new ServiceResponse<UserLoginDto>
-    //    {
-    //        Content = loginDto,
-    //        StatusCode = Enums.StatusCode.Ok
-    //    };
-    //}
+ 
     public async Task<ServiceResponse<UserLoginDto>> LoginAsync(UserLoginDto loginDto)
     {
         var userResponse = await GetUserByEmailAsync(loginDto.Email);

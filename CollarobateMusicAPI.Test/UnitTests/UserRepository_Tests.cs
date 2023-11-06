@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using CollaborateMusicAPI.Contexts;
 using CollaborateMusicAPI.Models.Entities;
 using CollaborateMusicAPI.Repositories;
 using Moq;
@@ -18,25 +19,25 @@ public class UserRepository_Tests
     public async Task CreatAsync_Should_ReturnUserEntity_When_CreatedSuccessfully()
     {
         // Arrange  
-        var entity = new Users() { Email = "testuser@example.com", PasswordHash = "BytMig123!", OAuthId = null, OAuthProvider = null, CreatedDate = DateTime.UtcNow };
+        var entity = new ApplicationUser() { Email = "testuser@example.com", PasswordHash = "BytMig123!", OAuthId = null, OAuthProvider = null, CreatedDate = DateTime.UtcNow };
 
-        _usersRepositoryMock.Setup(x => x.CreateAsync(It.IsAny<Users>())).ReturnsAsync(entity);    
+        _usersRepositoryMock.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(entity);    
 
         // Act
         var result = await _usersRepositoryMock.Object.CreateAsync(entity);
 
         // Assert
         Assert.NotNull(result);
-        Assert.IsType<Users>(result);
+        Assert.IsType<ApplicationUser>(result);
         Assert.Equal(entity.Email, result.Email);
     }
     [Fact]
     public async Task ExistsAsync_Should_ReturnTrue_When_EntityAlreadyExists()
     {
         // Arrange  
-        var entity = new Users() { Email = "testuser@example.com", PasswordHash = "BytMig123!", OAuthId = null, OAuthProvider = null, CreatedDate = DateTime.UtcNow };
+        var entity = new ApplicationUser() { Email = "testuser@example.com", PasswordHash = "BytMig123!", OAuthId = null, OAuthProvider = null, CreatedDate = DateTime.UtcNow };
 
-        _usersRepositoryMock.Setup(x => x.ExistsAsync(It.IsAny<Expression<Func<Users, bool>>>())).ReturnsAsync(true);
+        _usersRepositoryMock.Setup(x => x.ExistsAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>())).ReturnsAsync(true);
    
 
         // Act
@@ -50,9 +51,9 @@ public class UserRepository_Tests
     public async Task ExistsAsync_Should_ReturnFalse_When_EntityDoesNotExists()
     {
         // Arrange  
-        var entity = new Users() { Email = "testuser@example.com", PasswordHash = "BytMig123!", OAuthId = null, OAuthProvider = null, CreatedDate = DateTime.UtcNow };
+        var entity = new ApplicationUser() { Email = "testuser@example.com", PasswordHash = "BytMig123!", OAuthId = null, OAuthProvider = null, CreatedDate = DateTime.UtcNow };
 
-        _usersRepositoryMock.Setup(x => x.ExistsAsync(It.IsAny<Expression<Func<Users, bool>>>())).ReturnsAsync(false);
+        _usersRepositoryMock.Setup(x => x.ExistsAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>())).ReturnsAsync(false);
 
 
         // Act

@@ -6,6 +6,7 @@ using CollaborateMusicAPI.Models.Entities;
 using CollaborateMusicAPI.Models;
 using CollaborateMusicAPI.Enums;
 using System.Linq.Expressions;
+using CollaborateMusicAPI.Contexts;
 
 namespace CollarobateMusicAPI.Test.UnitTests;
 
@@ -35,7 +36,7 @@ public class UserService_Tests
         };
 
       
-        _mockUserRepository.Setup(x => x.CreateAsync(It.IsAny<Users>())).ReturnsAsync(new Users());
+        _mockUserRepository.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(new ApplicationUser());
 
        
 
@@ -72,7 +73,7 @@ public class UserService_Tests
         };
 
        
-        _mockUserRepository.Setup(x => x.ExistsAsync(It.IsAny<Expression<Func<Users, bool>>>())).ReturnsAsync(true);
+        _mockUserRepository.Setup(x => x.ExistsAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>())).ReturnsAsync(true);
 
 
 

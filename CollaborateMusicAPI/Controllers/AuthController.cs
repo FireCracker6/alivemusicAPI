@@ -77,9 +77,7 @@ public class AuthController : ControllerBase
 
             var existingUserResponse = await _userService.GetUserByEmailAsync(googleUser.Email);
 
-            // If the user already exists, generate a JWT and return it with their details
-            // If the user already exists, generate a JWT and return it with their details
-            // If the user already exists, generate a JWT and return it with their details
+        
             if (existingUserResponse.StatusCode == Enums.StatusCode.Ok && existingUserResponse.Content != null)
             {
                 // Assuming that existingUserResponse.Content has an Id property which is the userId.

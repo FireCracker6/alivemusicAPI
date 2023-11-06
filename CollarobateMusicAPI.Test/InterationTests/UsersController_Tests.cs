@@ -15,16 +15,31 @@ namespace CollarobateMusicAPI.Test.InterationTests
     public class UsersController_Tests
     {
         private readonly Mock<IUserService> _mockUsersService;
-        private readonly Mock<IExternalAuthService> _mockExternalAuthService; // Mock the external auth service
+        private readonly Mock<IExternalAuthService> _mockExternalAuthService;
+        private readonly Mock<IGoogleTokenService> _mockGoogleTokenService;
+        private readonly Mock<ITokenService> _mockTokenService;
         private readonly UsersController _usersController;
+        private readonly ApplicationDBContext _mockContext;
 
         public UsersController_Tests()
         {
             _mockUsersService = new Mock<IUserService>();
-            _mockExternalAuthService = new Mock<IExternalAuthService>(); // Initialize the mock
+            _mockExternalAuthService = new Mock<IExternalAuthService>();
+            _mockGoogleTokenService = new Mock<IGoogleTokenService>();
+            _mockTokenService = new Mock<ITokenService>();
 
-            // Now pass both mocks to the UsersController constructor
-            _usersController = new UsersController(_mockUsersService.Object, _mockExternalAuthService.Object);
+            // Use in-memory database for testing
+            var options = new DbContextOptionsBuilder<ApplicationDBContext>()
+                .UseInMemoryDatabase(databaseName: "TestDatabase") // Make sure to have the Microsoft.EntityFrameworkCore.InMemory package installed
+                .Options;
+            _mockContext = new ApplicationDBContext(options);
+
+            // Now pass all mocks to the UsersController constructor
+            _usersController = new UsersController(
+                _mockUsersService.Object,
+                _mockGoogleTokenService.Object,
+                _mockContext,
+                _mockTokenService.Object);
         }
 
         [Fact]
@@ -42,9 +57,9 @@ namespace CollarobateMusicAPI.Test.InterationTests
 
             // Mock GetUserByEmailAsync to simulate a user already exists
             _mockUsersService.Setup(service => service.GetUserByEmailAsync(schema.Email))
-                             .ReturnsAsync(new ServiceResponse<Users>
+                             .ReturnsAsync(new ServiceResponse<ApplicationUser>
                              {
-                                 Content = new Users { Email = schema.Email }
+                                 Content = new ApplicationUser { Email = schema.Email }
                              });
 
             // Act
