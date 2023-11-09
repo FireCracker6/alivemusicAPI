@@ -26,9 +26,9 @@ public class UsersController_Tests
         _mockTokenService = new Mock<ITokenService>();
         _mockGoogleTokenService = new Mock<IGoogleTokenService>();
 
-        // Mock the ApplicationDBContext using an in-memory database or a mock, depending on your testing strategy
+       
         var options = new DbContextOptionsBuilder<ApplicationDBContext>()
-            .UseInMemoryDatabase(databaseName: "TestDatabase") // You need to include the Microsoft.EntityFrameworkCore.InMemory package
+            .UseInMemoryDatabase(databaseName: "TestDatabase") 
             .Options;
         var context = new ApplicationDBContext(options);
 

@@ -27,14 +27,18 @@ namespace CollarobateMusicAPI.Test.InterationTests
             _mockExternalAuthService = new Mock<IExternalAuthService>();
             _mockGoogleTokenService = new Mock<IGoogleTokenService>();
             _mockTokenService = new Mock<ITokenService>();
+            // Set up the token service to return some dummy token when called
+            _mockTokenService.Setup(t => t.GenerateTokenAsync(It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<bool>()))
+                   .ReturnsAsync("dummy-token");
+
 
             // Use in-memory database for testing
             var options = new DbContextOptionsBuilder<ApplicationDBContext>()
-                .UseInMemoryDatabase(databaseName: "TestDatabase") // Make sure to have the Microsoft.EntityFrameworkCore.InMemory package installed
+                .UseInMemoryDatabase(databaseName: "TestDatabase") 
                 .Options;
             _mockContext = new ApplicationDBContext(options);
 
-            // Now pass all mocks to the UsersController constructor
+
             _usersController = new UsersController(
                 _mockUsersService.Object,
                 _mockGoogleTokenService.Object,

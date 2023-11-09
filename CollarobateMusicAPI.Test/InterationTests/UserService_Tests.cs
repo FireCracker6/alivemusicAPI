@@ -1,4 +1,6 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Linq.Expressions;
+using CollaborateMusicAPI.Authentication;
 using CollaborateMusicAPI.Contexts;
 using CollaborateMusicAPI.Models;
 using CollaborateMusicAPI.Models.DTOs;
@@ -8,6 +10,7 @@ using CollaborateMusicAPI.Services;
 using CollarobateMusicAPI.Test.UnitTests;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Moq;
 
 namespace CollarobateMusicAPI.Test.InterationTests;
@@ -18,11 +21,10 @@ public class UserService_Tests
     private readonly ApplicationDBContext _context;
     private readonly IUserService _userService;
     private readonly IUsersRepository _usersRepository;
-    private readonly Mock<ITokenService> _mockTokenService;
     private readonly Mock<UserManager<ApplicationUser>> _mockUserManager;
 
 
-    public UserService_Tests()
+    public UserService_Tests(IUsersRepository usersRepository = null)
     {
         var options = new DbContextOptionsBuilder<ApplicationDBContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -30,24 +32,34 @@ public class UserService_Tests
         _context = new ApplicationDBContext(options);
         _usersRepository = new UsersRepository(_context);
 
-        // Mocking the UserManager<TUser>
         var userStoreMock = new Mock<IUserStore<ApplicationUser>>();
         _mockUserManager = new Mock<UserManager<ApplicationUser>>(
             userStoreMock.Object, null, null, null, null, null, null, null, null);
 
-        // Mocking the ITokenService
+       
+        _mockUserManager.Setup(um => um.FindByEmailAsync(It.IsAny<string>()))
+                        .ReturnsAsync((string email) => _context.Users.FirstOrDefault(u => u.Email == email));
+        _mockUserManager.Setup(um => um.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
+                        .ReturnsAsync(IdentityResult.Success);
+
         var tokenServiceMock = new Mock<ITokenService>();
+     
 
-        // Then, you create the GenerateTokenService mock with its dependencies
-        var generateTokenServiceMock = new Mock<GenerateTokenService>(tokenServiceMock.Object);
+       
+        var jwtSettings = Options.Create(new JwtSettings { Key = "4b623c772ff94971e1b1bb0723b2a0cb"  });
+        var generateTokenService = new GenerateTokenService(jwtSettings);
 
-        // Now, you can use generateTokenServiceMock.Object when you initialize UserService
-        _userService = new UserService(
+
+        
+
+            _userService = new UserService(
             _usersRepository,
-            generateTokenServiceMock.Object,
-            _mockTokenService.Object, // This is either a mock or the real ITokenService
-            _mockUserManager.Object);
+            generateTokenService, 
+            tokenServiceMock.Object, 
+            _mockUserManager.Object); 
+            this._usersRepository = usersRepository;
     }
+
 
     [Fact]
     public async Task CreateAsync_Should_ReturnServiceResponseWithStatusResponse201_WhenCreatedSuccessfylly()
@@ -70,11 +82,13 @@ public class UserService_Tests
 
 
 
+
         // Assert
         Assert.NotNull(result.Content);
-        Assert.IsType<ServiceResponse<ApplicationUser>>(result);
-        Assert.Equal(201, (int)result.StatusCode);
+        Assert.IsType<ServiceResponse<UserWithTokenResponse>>(result);
+        Assert.Equal(CollaborateMusicAPI.Enums.StatusCode.Created, result.StatusCode);
         Assert.Equal(schema.Email, result.Content.User.Email);
+
     }
 
     [Fact]
@@ -90,17 +104,29 @@ public class UserService_Tests
             CreateDate = DateTime.UtcNow
         };
         var request = new ServiceRequest<UserRegistrationDto> { Content = schema };
-        await _userService.CreateAsync(request);
 
+        ApplicationUser createdUser = new ApplicationUser
+        {
+            UserName = schema.Email,
+            Email = schema.Email
+        };
+
+        // First creation
+        _mockUserManager.Setup(um => um.FindByEmailAsync(schema.Email)).ReturnsAsync((ApplicationUser)null);
+        _mockUserManager.Setup(um => um.CreateAsync(It.IsAny<ApplicationUser>(), schema.Password)).ReturnsAsync(IdentityResult.Success);
 
         // Act
+        await _userService.CreateAsync(request);
+
+        // Setup FindByEmailAsync to return the created user for subsequent calls
+        _mockUserManager.Setup(um => um.FindByEmailAsync(schema.Email)).ReturnsAsync(createdUser);
+
+        // Act again for the second time
         var result = await _userService.CreateAsync(request);
-
-
 
         // Assert
         Assert.NotNull(result);
-        Assert.IsType<ServiceResponse<ApplicationUser>>(result);
+        Assert.Equal(CollaborateMusicAPI.Enums.StatusCode.Conflict, result.StatusCode);
         Assert.Equal(409, (int)result.StatusCode);
         Assert.Null(result.Content);
     }

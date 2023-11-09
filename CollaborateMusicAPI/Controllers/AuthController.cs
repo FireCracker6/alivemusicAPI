@@ -87,10 +87,10 @@ public class AuthController : ControllerBase
 
                 if (user == null)
                 {
-                    return NotFound("User not found."); // This should not happen, just in case
+                    return NotFound("User not found."); 
                 }
 
-                // Now return the token along with user details
+             
                 return Ok(new
                 {
                     Token = token,
@@ -98,7 +98,7 @@ public class AuthController : ControllerBase
                     {
                         user.Id,
                         user.Email,
-                        FullName = user.Email // Use the actual property for the user's full name
+                        FullName = user.Email 
                     }
                 });
             }

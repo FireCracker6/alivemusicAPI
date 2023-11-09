@@ -21,8 +21,6 @@ public interface IUserService
     Task<ServiceResponse<UserLoginDto>> LoginAsync(UserLoginDto loginDto);
 
 
-
-
 }
 
 public class UserService : IUserService

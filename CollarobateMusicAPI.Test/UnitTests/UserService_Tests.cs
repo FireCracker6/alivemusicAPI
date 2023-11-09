@@ -7,19 +7,50 @@ using CollaborateMusicAPI.Models;
 using CollaborateMusicAPI.Enums;
 using System.Linq.Expressions;
 using CollaborateMusicAPI.Contexts;
+using Microsoft.AspNetCore.Identity;
+using CollaborateMusicAPI.Authentication;
+using Microsoft.Extensions.Options;
 
 namespace CollarobateMusicAPI.Test.UnitTests;
 
 public class UserService_Tests
 {
     private readonly Mock<IUsersRepository> _mockUserRepository;
-    private readonly UserService _userService;  // Use a real instance, not a mock
+    private readonly Mock<ITokenService> _mockTokenService;
+    private readonly Mock<UserManager<ApplicationUser>> _mockUserManager;
 
-    public UserService_Tests()  // Remove the parameter
+    private readonly UserService _userService;
+    private readonly GenerateTokenService _generateTokenService;
+
+
+    public UserService_Tests()
     {
+        // Initialize the mocks
         _mockUserRepository = new Mock<IUsersRepository>();
-      // _userService = new UserService(_mockUserRepository.Object);  // Inject the mock repository into the real service
+        _mockUserRepository.Setup(x => x.ExistsAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>())).ReturnsAsync(true);
+
+        _mockTokenService = new Mock<ITokenService>();
+        _mockUserManager = new Mock<UserManager<ApplicationUser>>(
+            Mock.Of<IUserStore<ApplicationUser>>(), null, null, null, null, null, null, null, null);
+
+        // Setup mocked JWT settings
+        var jwtSettings = new JwtSettings { Key = "4b623c772ff94971e1b1bb0723b2a0cb" };
+        var jwtOptions = Options.Create(jwtSettings);
+
+        // Create an instance of GenerateTokenService with mocked settings
+        _generateTokenService = new GenerateTokenService(jwtOptions);
+
+
+        // Create an instance of UserService with the mocked dependencies
+        _userService = new UserService(
+            _mockUserRepository.Object, 
+            _generateTokenService,      
+            _mockTokenService.Object,   
+            _mockUserManager.Object     
+        );
     }
+
+
 
     [Fact]
     public async Task CreateAsync_ShouldReturnServiceResponseWithStatusCode201_WhenUserCreatedSuccessfully()
@@ -29,16 +60,21 @@ public class UserService_Tests
         {
             Email = "testingtest@example.com",
             Password = "BytMig123!",
-            ConfirmPassword = "BytMig123!", 
+            ConfirmPassword = "BytMig123!",
             OAuthId = "default",
             OAuthProvider = "default",
             CreateDate = DateTime.UtcNow
         };
 
-      
-        _mockUserRepository.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(new ApplicationUser());
 
-       
+        _mockUserManager.Setup(um => um.FindByEmailAsync(It.IsAny<string>()))
+                 .ReturnsAsync((ApplicationUser)null!); 
+
+        _mockUserManager.Setup(um => um.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
+                        .ReturnsAsync(IdentityResult.Success);
+
+
+
 
         var request = new ServiceRequest<UserRegistrationDto>
         {
@@ -50,7 +86,7 @@ public class UserService_Tests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(CollaborateMusicAPI.Enums.StatusCode.Created, result.StatusCode);
+        Assert.Equal(StatusCode.Created, result.StatusCode);
     }
 
     [Fact]
@@ -72,11 +108,11 @@ public class UserService_Tests
             Content = newUserDto
         };
 
-       
-        _mockUserRepository.Setup(x => x.ExistsAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>())).ReturnsAsync(true);
+        // Set up the UserManager mock to return a user, simulating that the user already exists
+        _mockUserManager.Setup(um => um.FindByEmailAsync(newUserDto.Email))
+                  .ReturnsAsync(new ApplicationUser() { Email = newUserDto.Email });
 
-
-
+      
 
         // Act
         var result = await _userService.CreateAsync(request);
@@ -85,7 +121,5 @@ public class UserService_Tests
         Assert.NotNull(result);
         Assert.Equal(StatusCode.Conflict, result.StatusCode);
     }
-
-
 
 }

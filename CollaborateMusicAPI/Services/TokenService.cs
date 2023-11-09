@@ -23,6 +23,7 @@ public interface ITokenService
     Task<string> RefreshTokenAsync(string accessToken, string refreshToken);
     Guid GetUserIdFromToken(string token);
     Task<string> CreateTokenAsync(string email, Guid userId);
+    Task<string> GenerateTokenAsync(string email, Guid userId, bool rememberMe);
 
 }
 
@@ -344,8 +345,29 @@ public class TokenService : ITokenService
 
         return refreshToken.Token;
     }
+    public async Task<string> GenerateTokenAsync(string email, Guid userId, bool rememberMe)
+    {
+        // Generate a new token using the existing synchronous method.
+        var newToken = GenerateAuthToken(email, userId);
 
-   
+        // Generate a new refresh token using the existing asynchronous method.
+        var newRefreshToken = await GenerateRefreshToken(email, rememberMe);
+
+        // Save the new refresh token with the related user information if necessary.
+        // Note: This step is based on assumption since your provided code has the repository commented out.
+        await _usersRepository.SaveRefreshToken(new RefreshToken
+        {
+            Token = newRefreshToken,
+            UserId = userId,
+            Expires = DateTime.UtcNow.AddDays(rememberMe ? 30 : 7),
+            Created = DateTime.UtcNow
+        });
+
+        // Return the new token.
+        return newToken;
+    }
+
+
 }
 
 public class RefreshTokenRequest

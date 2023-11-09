@@ -3,11 +3,7 @@ using System.Security;
 using CollaborateMusicAPI.Authentication;
 using CollaborateMusicAPI.Models.DTOs;
 using CollaborateMusicAPI.Models;
-using Google.Apis.Auth;
-using System.Net.Http;
-using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
-using Azure.Core;
 using System.Net.Http.Headers;
 
 namespace CollaborateMusicAPI.Services;
