@@ -17,6 +17,8 @@ using CollaborateMusicAPI.Authorization;
 using Microsoft.OpenApi.Models;
 using System.Security.Claims;
 using System.Text;
+using CollaborateMusicAPI.Services.Email;
+using CollaborateMusicAPI.Services.PasswordReset;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +36,9 @@ builder.Services.AddTransient<IExternalAuthService, ExternalAuthService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddScoped<IPasswordHasher<ApplicationUser>, BCryptPasswordHasher<ApplicationUser>>();
 builder.Services.AddSingleton<ITokenValidationService, TokenValidationService>();
+builder.Services.AddTransient<IEmailService, EmailService>();
+builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
+
 
 
 

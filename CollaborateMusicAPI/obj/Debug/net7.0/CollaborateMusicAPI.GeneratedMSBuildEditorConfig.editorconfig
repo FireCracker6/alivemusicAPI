@@ -15,3 +15,7 @@ build_property.SupportLocalizedComponentNames =
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
 build_property.MSBuildProjectDirectory = C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollaborateMusicAPI
 build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/Svart/Source/Repos/Webbutveckling/CollaborateMusicAPI/CollaborateMusicAPI/CollaborateMusicAPI/Views/EmailTemplates/PasswordResetEmailTemplate.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1haWxUZW1wbGF0ZXNcUGFzc3dvcmRSZXNldEVtYWlsVGVtcGxhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 

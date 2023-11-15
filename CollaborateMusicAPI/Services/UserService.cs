@@ -6,8 +6,10 @@ using CollaborateMusicAPI.Models;
 using CollaborateMusicAPI.Models.DTOs;
 using CollaborateMusicAPI.Models.Entities;
 using CollaborateMusicAPI.Repositories;
+using CollaborateMusicAPI.Services.Email;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Newtonsoft.Json.Linq;
 
 namespace CollaborateMusicAPI.Services;
@@ -145,7 +147,7 @@ public class UserService : IUserService
                 return response;
             }
 
-          
+
             response.Content = await _usersRepository.GetUserByEmailAsync(email);
 
             if (response.Content == null)
@@ -233,7 +235,7 @@ public class UserService : IUserService
         return response;
     }
 
- 
+
     public async Task<ServiceResponse<UserLoginDto>> LoginAsync(UserLoginDto loginDto)
     {
         var userResponse = await GetUserByEmailAsync(loginDto.Email);
@@ -271,6 +273,9 @@ public class UserService : IUserService
         };
 
     }
+
+ 
+
 
 
 

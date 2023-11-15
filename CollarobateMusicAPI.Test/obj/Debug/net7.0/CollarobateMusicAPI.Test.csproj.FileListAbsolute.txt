@@ -169,3 +169,5 @@ C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicA
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollarobateMusicAPI.Test\bin\Debug\net7.0\System.CodeDom.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollarobateMusicAPI.Test\bin\Debug\net7.0\System.Management.dll
 C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollarobateMusicAPI.Test\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Management.dll
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollarobateMusicAPI.Test\bin\Debug\net7.0\SendGrid.dll
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollarobateMusicAPI.Test\bin\Debug\net7.0\StarkbankEcdsa.dll

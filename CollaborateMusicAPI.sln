@@ -5,7 +5,7 @@ VisualStudioVersion = 17.7.34018.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollaborateMusicAPI", "CollaborateMusicAPI\CollaborateMusicAPI.csproj", "{211005B3-1DB4-4B58-A0D1-FECE80E8C64F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollarobateMusicAPI.Test", "CollarobateMusicAPI.Test\CollarobateMusicAPI.Test.csproj", "{B5005DE9-46C4-4D3E-A037-DEE3C0AA240D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollarobateMusicAPI.Test", "CollarobateMusicAPI.Test\CollarobateMusicAPI.Test.csproj", "{B5005DE9-46C4-4D3E-A037-DEE3C0AA240D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
