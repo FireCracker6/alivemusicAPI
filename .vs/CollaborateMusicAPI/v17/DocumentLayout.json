@@ -1,0 +1,94 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\CollaborateMusicAPI\\CollaborateMusicAPI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{211005B3-1DB4-4B58-A0D1-FECE80E8C64F}|CollaborateMusicAPI\\CollaborateMusicAPI.csproj|c:\\users\\svart\\source\\repos\\webbutveckling\\collaboratemusicapi\\collaboratemusicapi\\collaboratemusicapi\\collaboratemusicapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{211005B3-1DB4-4B58-A0D1-FECE80E8C64F}|CollaborateMusicAPI\\CollaborateMusicAPI.csproj|solutionrelative:collaboratemusicapi\\collaboratemusicapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{211005B3-1DB4-4B58-A0D1-FECE80E8C64F}|CollaborateMusicAPI\\CollaborateMusicAPI.csproj|c:\\users\\svart\\source\\repos\\webbutveckling\\collaboratemusicapi\\collaboratemusicapi\\collaboratemusicapi\\collaboratemusicapi.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{211005B3-1DB4-4B58-A0D1-FECE80E8C64F}|CollaborateMusicAPI\\CollaborateMusicAPI.csproj|solutionrelative:collaboratemusicapi\\collaboratemusicapi.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{211005B3-1DB4-4B58-A0D1-FECE80E8C64F}|CollaborateMusicAPI\\CollaborateMusicAPI.csproj|c:\\users\\svart\\source\\repos\\webbutveckling\\collaboratemusicapi\\collaboratemusicapi\\collaboratemusicapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{211005B3-1DB4-4B58-A0D1-FECE80E8C64F}|CollaborateMusicAPI\\CollaborateMusicAPI.csproj|solutionrelative:collaboratemusicapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\dotnet\\sdk\\8.0.200\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.TargetFrameworkInference.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\CollaborateMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI\\appsettings.json",
+              "RelativeDocumentMoniker": "CollaborateMusicAPI\\appsettings.json",
+              "ToolTip": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\CollaborateMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI\\appsettings.json",
+              "RelativeToolTip": "CollaborateMusicAPI\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-02-23T10:22:59.577Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CollaborateMusicAPI",
+              "DocumentMoniker": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\CollaborateMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI.csproj",
+              "RelativeDocumentMoniker": "CollaborateMusicAPI\\CollaborateMusicAPI.csproj",
+              "ToolTip": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\CollaborateMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI.csproj",
+              "RelativeToolTip": "CollaborateMusicAPI\\CollaborateMusicAPI.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-02-23T10:18:48.005Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Microsoft.NET.TargetFrameworkInference.targets",
+              "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\8.0.200\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.TargetFrameworkInference.targets",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\8.0.200\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.TargetFrameworkInference.targets",
+              "ToolTip": "C:\\Program Files\\dotnet\\sdk\\8.0.200\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.TargetFrameworkInference.targets",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\8.0.200\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.TargetFrameworkInference.targets",
+              "ViewState": "AQIAAIgAAAAAAAAAAAAswKUAAAAEAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2024-02-23T10:18:14.967Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CollaborateMusicAPI.csproj",
+              "DocumentMoniker": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\CollaborateMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI.csproj",
+              "RelativeDocumentMoniker": "CollaborateMusicAPI\\CollaborateMusicAPI.csproj",
+              "ToolTip": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\CollaborateMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI.csproj",
+              "RelativeToolTip": "CollaborateMusicAPI\\CollaborateMusicAPI.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAABNAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-02-23T10:17:31.049Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{57d563b6-44a5-47df-85be-f4199ad6b651}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

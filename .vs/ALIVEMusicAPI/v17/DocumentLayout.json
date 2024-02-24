@@ -1,0 +1,219 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|c:\\users\\svart\\source\\repos\\webbutveckling\\alivemusicapi\\alivemusicapi\\collaboratemusicapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|solutionrelative:collaboratemusicapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|c:\\users\\svart\\source\\repos\\webbutveckling\\alivemusicapi\\alivemusicapi\\collaboratemusicapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|solutionrelative:collaboratemusicapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|c:\\users\\svart\\source\\repos\\webbutveckling\\alivemusicapi\\alivemusicapi\\collaboratemusicapi\\controllers\\profilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|solutionrelative:collaboratemusicapi\\controllers\\profilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|c:\\users\\svart\\source\\repos\\webbutveckling\\alivemusicapi\\alivemusicapi\\collaboratemusicapi\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|solutionrelative:collaboratemusicapi\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|c:\\users\\svart\\source\\repos\\webbutveckling\\alivemusicapi\\alivemusicapi\\collaboratemusicapi\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|solutionrelative:collaboratemusicapi\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|c:\\users\\svart\\source\\repos\\webbutveckling\\alivemusicapi\\alivemusicapi\\collaboratemusicapi\\repositories\\usersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|solutionrelative:collaboratemusicapi\\repositories\\usersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|c:\\users\\svart\\source\\repos\\webbutveckling\\alivemusicapi\\alivemusicapi\\collaboratemusicapi\\models\\dtos\\userlogindto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|solutionrelative:collaboratemusicapi\\models\\dtos\\userlogindto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|c:\\users\\svart\\source\\repos\\webbutveckling\\alivemusicapi\\alivemusicapi\\collaboratemusicapi\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|solutionrelative:collaboratemusicapi\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|c:\\users\\svart\\source\\repos\\webbutveckling\\alivemusicapi\\alivemusicapi\\collaboratemusicapi\\seeddata\\roleseeder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|solutionrelative:collaboratemusicapi\\seeddata\\roleseeder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|c:\\users\\svart\\source\\repos\\webbutveckling\\alivemusicapi\\alivemusicapi\\collaboratemusicapi\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|solutionrelative:collaboratemusicapi\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_LocalDB__MSSQLLocalDB/C__USERS_SVART_ONEDRIVE_DOKUMENT_ALIVEDEVIDENTITY_DB.MDF/True/SqlTable/dbo.AspNetRoleClaims.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|c:\\users\\svart\\source\\repos\\webbutveckling\\alivemusicapi\\alivemusicapi\\collaboratemusicapi\\helpers\\serviceresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{98E729B7-8127-40EE-A3AD-BD6461F55E8B}|CollaborateMusicAPI\\ALIVEMusicAPI.csproj|solutionrelative:collaboratemusicapi\\helpers\\serviceresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{57d563b6-44a5-47df-85be-f4199ad6b651}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\Program.cs",
+              "RelativeDocumentMoniker": "CollaborateMusicAPI\\Program.cs",
+              "ToolTip": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\Program.cs",
+              "RelativeToolTip": "CollaborateMusicAPI\\Program.cs",
+              "ViewState": "AQIAACMAAAAAAAAAAAAYwCkAAAApAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-23T18:14:45.943Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\appsettings.json",
+              "RelativeDocumentMoniker": "CollaborateMusicAPI\\appsettings.json",
+              "ToolTip": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\appsettings.json",
+              "RelativeToolTip": "CollaborateMusicAPI\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAwAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-02-23T17:40:58.598Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "UserLoginDto.cs",
+              "DocumentMoniker": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\Models\\DTOs\\UserLoginDto.cs",
+              "RelativeDocumentMoniker": "CollaborateMusicAPI\\Models\\DTOs\\UserLoginDto.cs",
+              "ToolTip": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\Models\\DTOs\\UserLoginDto.cs",
+              "RelativeToolTip": "CollaborateMusicAPI\\Models\\DTOs\\UserLoginDto.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAgAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-23T16:51:59.038Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "RoleSeeder.cs",
+              "DocumentMoniker": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\SeedData\\RoleSeeder.cs",
+              "RelativeDocumentMoniker": "CollaborateMusicAPI\\SeedData\\RoleSeeder.cs",
+              "ToolTip": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\SeedData\\RoleSeeder.cs",
+              "RelativeToolTip": "CollaborateMusicAPI\\SeedData\\RoleSeeder.cs",
+              "ViewState": "AQIAAAEAAAAAAAAAAAAawBMAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-23T16:01:43.864Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "CollaborateMusicAPI\\Controllers\\UsersController.cs",
+              "ToolTip": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "CollaborateMusicAPI\\Controllers\\UsersController.cs",
+              "ViewState": "AQIAAGAAAAAAAAAAAAAqwGoAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-23T15:44:19.062Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ProfileController.cs",
+              "DocumentMoniker": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\Controllers\\ProfileController.cs",
+              "RelativeDocumentMoniker": "CollaborateMusicAPI\\Controllers\\ProfileController.cs",
+              "ToolTip": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\Controllers\\ProfileController.cs",
+              "RelativeToolTip": "CollaborateMusicAPI\\Controllers\\ProfileController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-23T15:44:12.889Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "CollaborateMusicAPI\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "CollaborateMusicAPI\\Controllers\\AuthController.cs",
+              "ViewState": "AQIAACQAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-23T15:43:58.431Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "UsersRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\Repositories\\UsersRepository.cs",
+              "RelativeDocumentMoniker": "CollaborateMusicAPI\\Repositories\\UsersRepository.cs",
+              "ToolTip": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\Repositories\\UsersRepository.cs",
+              "RelativeToolTip": "CollaborateMusicAPI\\Repositories\\UsersRepository.cs",
+              "ViewState": "AQIAABMAAAAAAAAAAAAawBsAAAAEAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-23T13:05:06.939Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ServiceResponse.cs",
+              "DocumentMoniker": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\Helpers\\ServiceResponse.cs",
+              "RelativeDocumentMoniker": "CollaborateMusicAPI\\Helpers\\ServiceResponse.cs",
+              "ToolTip": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\Helpers\\ServiceResponse.cs",
+              "RelativeToolTip": "CollaborateMusicAPI\\Helpers\\ServiceResponse.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-23T13:02:14.079Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "CollaborateMusicAPI\\Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "CollaborateMusicAPI\\Controllers\\AccountController.cs",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAawDEAAAAEAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-23T12:31:00.142Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\Services\\UserService.cs",
+              "RelativeDocumentMoniker": "CollaborateMusicAPI\\Services\\UserService.cs",
+              "ToolTip": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\Services\\UserService.cs",
+              "RelativeToolTip": "CollaborateMusicAPI\\Services\\UserService.cs",
+              "ViewState": "AQIAADEBAAAAAAAAAAAawDQBAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-23T12:11:04.44Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "dbo.AspNetRoleClaims [Data]",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/_LocalDB__MSSQLLocalDB/C__USERS_SVART_ONEDRIVE_DOKUMENT_ALIVEDEVIDENTITY_DB.MDF/True/SqlTable/dbo.AspNetRoleClaims.sql",
+              "ToolTip": "dbo.AspNetRoleClaims [Data]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2024-02-23T12:50:08.898Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

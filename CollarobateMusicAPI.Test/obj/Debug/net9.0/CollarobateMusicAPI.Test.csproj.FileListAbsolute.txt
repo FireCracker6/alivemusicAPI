@@ -1,0 +1,7 @@
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollarobateMusicAPI.Test\bin\Debug\net9.0\CoverletSourceRootsMapping_CollarobateMusicAPI.Test
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollarobateMusicAPI.Test\obj\Debug\net9.0\CollarobateMusicAPI.Test.csproj.AssemblyReference.cache
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollarobateMusicAPI.Test\obj\Debug\net9.0\CollarobateMusicAPI.Test.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollarobateMusicAPI.Test\obj\Debug\net9.0\CollarobateMusicAPI.Test.AssemblyInfoInputs.cache
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollarobateMusicAPI.Test\obj\Debug\net9.0\CollarobateMusicAPI.Test.AssemblyInfo.cs
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollarobateMusicAPI.Test\obj\Debug\net9.0\CollarobateMusicAPI.Test.csproj.CoreCompileInputs.cache
+C:\Users\Svart\Source\Repos\Webbutveckling\CollaborateMusicAPI\CollaborateMusicAPI\CollarobateMusicAPI.Test\obj\Debug\net9.0\CollarobateMusicAPI.Test.sourcelink.json
