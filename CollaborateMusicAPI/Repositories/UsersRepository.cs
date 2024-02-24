@@ -10,6 +10,8 @@ public interface IUsersRepository : IRepository<ApplicationUser, ApplicationDBCo
 {
     Task<ApplicationUser?> GetUserByEmailAsync(string email);
     Task SaveRefreshToken(RefreshToken refreshToken);
+    Task<ApplicationUser> GetUserByIdAsync(Guid id);
+    Task UpdateUser(ApplicationUser user);
 }
 
 public class UsersRepository : Repository<ApplicationUser, ApplicationDBContext>, IUsersRepository
@@ -30,4 +32,17 @@ public class UsersRepository : Repository<ApplicationUser, ApplicationDBContext>
         await _context.RefreshTokens.AddAsync(refreshToken);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<ApplicationUser> GetUserByIdAsync(Guid id)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        return user;
+    }
+
+    public async Task UpdateUser(ApplicationUser user)
+    {
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+    }
+
 }

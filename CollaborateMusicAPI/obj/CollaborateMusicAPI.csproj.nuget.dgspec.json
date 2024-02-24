@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\CollaborateMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI.csproj": {}
+    "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\CollaborateMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI.csproj": {
+    "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\CollaborateMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI.csproj",
         "projectName": "CollaborateMusicAPI",
-        "projectPath": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\CollaborateMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI.csproj",
+        "projectPath": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI.csproj",
         "packagesPath": "C:\\Users\\Svart\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\CollaborateMusicAPI\\CollaborateMusicAPI\\CollaborateMusicAPI\\obj\\",
+        "outputPath": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -22,7 +22,7 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net7.0"
+          "net9.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -30,8 +30,8 @@
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net7.0": {
-            "targetAlias": "net7.0",
+          "net9.0": {
+            "targetAlias": "net9.0",
             "projectReferences": {}
           }
         },
@@ -39,11 +39,16 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
-        "net7.0": {
-          "targetAlias": "net7.0",
+        "net9.0": {
+          "targetAlias": "net9.0",
           "dependencies": {
             "Bcrypt.Net-Next": {
               "target": "Package",
@@ -51,7 +56,7 @@
             },
             "Google.Apis.Auth": {
               "target": "Package",
-              "version": "[1.63.0, )"
+              "version": "[1.67.0, )"
             },
             "Microsoft.AspNet.WebApi.Client": {
               "target": "Package",
@@ -59,47 +64,43 @@
             },
             "Microsoft.AspNetCore.Authentication.Google": {
               "target": "Package",
-              "version": "[7.0.13, )"
+              "version": "[9.0.0-preview.1.24081.5, )"
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
-              "version": "[7.0.13, )"
+              "version": "[9.0.0-preview.1.24081.5, )"
             },
             "Microsoft.AspNetCore.Cryptography.KeyDerivation": {
               "target": "Package",
-              "version": "[7.0.13, )"
+              "version": "[9.0.0-preview.1.24081.5, )"
             },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[7.0.13, )"
+              "version": "[9.0.0-preview.1.24081.5, )"
             },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
-              "version": "[7.0.13, )"
+              "version": "[9.0.0-preview.1.24081.5, )"
             },
             "Microsoft.EntityFrameWorkCore.Design": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
               "target": "Package",
-              "version": "[7.0.13, )"
+              "version": "[9.0.0-preview.1.24081.2, )"
             },
             "Microsoft.EntityFrameWorkCore.SqlServer": {
               "target": "Package",
-              "version": "[7.0.13, )"
+              "version": "[9.0.0-preview.1.24081.2, )"
             },
             "Microsoft.EntityFrameWorkCore.Tools": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
               "target": "Package",
-              "version": "[7.0.13, )"
+              "version": "[9.0.0-preview.1.24081.2, )"
             },
             "Microsoft.EntityFrameworkCore.InMemory": {
               "target": "Package",
-              "version": "[7.0.13, )"
+              "version": "[9.0.0-preview.1.24081.2, )"
             },
             "Microsoft.IdentityModel.Tokens": {
               "target": "Package",
-              "version": "[7.0.3, )"
+              "version": "[7.3.1, )"
             },
             "Newtonsoft.Json": {
               "target": "Package",
@@ -111,7 +112,7 @@
             },
             "SendGrid": {
               "target": "Package",
-              "version": "[9.28.1, )"
+              "version": "[9.29.2, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -119,7 +120,7 @@
             },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
-              "version": "[7.0.3, )"
+              "version": "[7.3.1, )"
             }
           },
           "imports": [
@@ -141,7 +142,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100-preview.1.24101.2/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

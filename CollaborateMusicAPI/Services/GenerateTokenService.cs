@@ -7,6 +7,7 @@ using CollaborateMusicAPI.Models;
 using CollaborateMusicAPI.Models.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 namespace CollaborateMusicAPI.Services;
 
@@ -30,7 +31,8 @@ public class GenerateTokenService
 
         var claims = new List<Claim>
     {
-        new Claim(ClaimTypes.NameIdentifier, userId)
+        new Claim(ClaimTypes.NameIdentifier, userId),
+       
     };
 
         var tokenOptions = new JwtSecurityToken(

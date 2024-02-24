@@ -2,6 +2,7 @@
 using CollaborateMusicAPI.Models;
 
 namespace CollaborateMusicAPI.Repositories;
+
 public class RefreshTokenRepository : Repository<RefreshToken, ApplicationDBContext>
 {
     public RefreshTokenRepository(ApplicationDBContext context) : base(context)

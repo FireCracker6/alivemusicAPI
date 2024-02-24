@@ -5,6 +5,7 @@ using CollaborateMusicAPI.Models;
 using CollaborateMusicAPI.Models.DTOs;
 using CollaborateMusicAPI.Models.Entities;
 using CollaborateMusicAPI.Services;
+using CollaborateMusicAPI.Services.Email;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,15 +22,16 @@ public class UsersController : ControllerBase
     private readonly IGoogleTokenService _googleTokenService;
     private readonly ApplicationDBContext _context;
     private readonly ITokenService _tokenService;
-   
+    private readonly IEmailService _emailService;
 
-    public UsersController(IUserService userService, IGoogleTokenService googleTokenService, ApplicationDBContext context, ITokenService tokenService)
+
+    public UsersController(IUserService userService, IGoogleTokenService googleTokenService, ApplicationDBContext context, ITokenService tokenService, IEmailService emailService)
     {
         _userService = userService;
         _googleTokenService = googleTokenService;
         _context = context;
         _tokenService = tokenService;
-        
+        _emailService = emailService;
     }
     [HttpPost("register")]
     public async Task<IActionResult> Register(UserRegistrationDto registrationDto)
@@ -56,6 +58,14 @@ public class UsersController : ControllerBase
             {
                 Content = registrationDto
             });
+            if (response.StatusCode == Enums.StatusCode.Created)
+            {
+                // Await the SendWelcomeEmailAsync method
+                await _emailService.SendWelcomeEmailAsync(registrationDto.Email, "Welcome to Alive! Music", registrationDto.Email);
+
+
+                // Optionally, handle the response from the SendWelcomeEmailAsync method
+            }
 
             return StatusCode((int)response.StatusCode, response);
         }
@@ -94,7 +104,6 @@ public class UsersController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(UserLoginDto loginDto)
     {
-       
         var response = await _userService.LoginAsync(loginDto);
 
         if (response.Content == null)
@@ -105,27 +114,31 @@ public class UsersController : ControllerBase
         // Assuming response.Content contains the JWT token
         var token = response.Content.JwtToken;
 
-        // Decode token to get user ID or use the user service to get user details
-        var userId = _tokenService.GetUserIdFromToken(token!);
-        var user = await _context.Users.FindAsync(userId);
-
-        if (user == null)
-        {
-            return NotFound("User not found."); // This should not happen, just in case
-        }
-
         // Now return the token along with user details
         return Ok(new
         {
             Token = token,
             User = new
             {
-                user.Id,
-                user.Email,
-                FullName = user.Email // Use the actual property for the user's full name
+                Id = response.Content.Id,
+                Email = response.Content.Email,
+                FullName = response.Content.Email // Use the actual property for the user's full name
             }
         });
     }
+
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout(string userId)
+    {
+      var response = await _userService.LogoutAsync(userId);
+
+        if (response.StatusCode == Enums.StatusCode.Ok)
+        {
+            return Ok(response);
+        }
+        return BadRequest(response);
+    }   
 
 
 

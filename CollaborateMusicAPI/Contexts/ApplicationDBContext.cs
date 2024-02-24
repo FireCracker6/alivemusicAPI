@@ -1,4 +1,5 @@
-﻿using CollaborateMusicAPI.Models;
+﻿using ALIVEMusicAPI.Models.Entities;
+using CollaborateMusicAPI.Models;
 using CollaborateMusicAPI.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -24,6 +25,9 @@ public class ApplicationDBContext : IdentityDbContext<ApplicationUser, IdentityR
     public DbSet<UserVerificationCode> UserVerificationCodes { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
 
+    public DbSet<UserSubscription> UserSubscriptions { get; set; }
+    public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -42,6 +46,10 @@ public class ApplicationDBContext : IdentityDbContext<ApplicationUser, IdentityR
              .HasOne(rt => rt.User)
              .WithMany(u => u.RefreshTokens)
              .HasForeignKey(rt => rt.UserId);
+
+        modelBuilder.Entity<SubscriptionPlan>()
+     .Property(b => b.Price)
+     .HasPrecision(18, 4); // Or any precision you need
 
 
 

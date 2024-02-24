@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics;
 using System.Security.Claims;
 using CollaborateMusicAPI.Contexts;
+using CollaborateMusicAPI.Services;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,11 +17,14 @@ public class AccountController : ControllerBase
 {
     private readonly ApplicationDBContext _context;
     private readonly ILogger<AccountController> _logger;
-
-    public AccountController(ApplicationDBContext context, ILogger<AccountController> logger)
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IUserService _userService;
+    public AccountController(ApplicationDBContext context, ILogger<AccountController> logger, UserManager<ApplicationUser> userManager, IUserService userService)
     {
         _context = context;
         _logger = logger;
+        _userManager = userManager;
+        _userService = userService;
     }
 
 
@@ -27,13 +32,7 @@ public class AccountController : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetUserInfo()
     {
-        var headers = Request.Headers;
-        foreach (var header in headers)
-        {
-            _logger.LogInformation($"{header.Key}: {header.Value}");
-        }
         var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        Debug.WriteLine($"User ID: {userIdString}");
         if (string.IsNullOrEmpty(userIdString)) return Unauthorized();
 
         if (!Guid.TryParse(userIdString, out var userId))
@@ -41,16 +40,14 @@ public class AccountController : ControllerBase
             return BadRequest("Invalid user ID format");
         }
 
-        var user = await _context.Users.FindAsync(userId); 
-        if (user == null) return NotFound();
-
-        return Ok(new
+        var response = await _userService.GetUserInfo(userId);
+        if (response.StatusCode == Enums.StatusCode.NotFound)
         {
-            user.Email
-            // Include other user details you want to return
-        });
-    }
+            return NotFound(response.Message);
+        }
 
+        return Ok(response.Data);
+    }
 
     [HttpGet("user")]
     public async Task<IActionResult> GetUserByEmail([FromQuery] string email)

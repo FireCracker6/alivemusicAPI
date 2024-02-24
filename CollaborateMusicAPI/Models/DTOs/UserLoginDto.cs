@@ -4,6 +4,7 @@ namespace CollaborateMusicAPI.Models.DTOs;
 
 public class UserLoginDto
 {
+    public Guid Id { get; set; }
     [Required(ErrorMessage = "Email is required")]
     [DataType(DataType.EmailAddress)]
     [EmailAddress(ErrorMessage = "Invalid email address format")]
@@ -17,6 +18,8 @@ public class UserLoginDto
     public string? OAuthProvider { get; set; }
 
     public Boolean? RememberMe { get; set; }
+
+    public string? UserRoles { get; set; }
 
     // Add these properties for JWT and refreshToken
     public string? JwtToken { get; set; }

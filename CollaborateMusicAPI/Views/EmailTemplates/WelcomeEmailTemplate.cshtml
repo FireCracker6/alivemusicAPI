@@ -1,0 +1,172 @@
+﻿@* No @page directive needed *@
+@* @model CollaborateMusicAPI.Views.EmailTemplates.PasswordResetEmailTemplateModel *@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="referrer" content="origin" />
+    <script src="https://kit.fontawesome.com/41c8b474e2.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Roboto&display=swap" rel="stylesheet">
+    <title>Welcome to Alive! Music</title>
+    <style>
+        .f-p-body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 16px;
+            color: #eeeaea;
+            background-color: #8071a3;
+        }
+
+        .main-content {
+            display: grid;
+            justify-content: center;
+            margin: 0 auto;
+            width: 80%;
+            background-color: #343333;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .logo-content {
+            display: flex;
+            justify-content: flex-start;
+            /* margin-left: -30px;
+                    margin-bottom: -50px; */
+        }
+
+            .logo-content img {
+                width: 100%; /* Ensures the image takes the full width of its container */
+                height: auto; /* Maintains the aspect ratio of the image */
+                object-fit: cover; /* Ensures the image covers the container */
+            }
+
+        .banner {
+            display: flex;
+            /* justify-content: flex-end;
+                    align-items: flex-end; */
+            /*     background-image: url("http://alivemusic.se/images/backgroundimages/istockphoto-1279103299-1024x1024.jpg");
+                    background-size: cover;
+                    background-position-y:center; */
+            width: 100%;
+            height: 100px;
+            margin: auto;
+            object-fit: cover;
+            filter: grayscale(50%) brightness(75%) contrast(120%) opacity(0.5);
+        }
+
+        .body-content {
+            padding: 60px;
+        }
+
+        .f-p-button {
+            background-color: #b7aecb;
+            border: none;
+            outline: none;
+            padding: 5px;
+            border-radius: 3px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1em;
+        }
+
+        a.f-p-button {
+            text-decoration: none;
+            color: #28252d;
+        }
+
+        a:hover.f-p-button {
+            text-decoration: none;
+            color: #bbb7c1;
+            background-color: #706a7b;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .footer {
+            display: grid;
+            width: 90%;
+            justify-content: flex-start;
+            margin: 0 auto;
+        }
+
+        .social-media {
+            display: flex;
+            justify-content: center;
+        }
+
+            .social-media div {
+                font-size: 20px;
+                padding-right: 10px;
+            }
+
+        @@media only screen and (max-width: 600px) {
+
+            .main-content {
+                width: 95%; /* Increase width for smaller screens */
+            }
+
+            .logo-content img {
+                max-width: 160px; /* Maximum width on small screens */
+                height: auto; /* Adjust height automatically */
+                object-fit: cover;
+                margin-left: auto; /* Center align image */
+                margin-right: auto;
+            }
+
+            .banner {
+                height: auto;
+            }
+
+            .body-content {
+                padding: 20px;
+            }
+
+                .body-content h1 {
+                    font-size: 25px;
+                    font-weight: 700;
+                }
+
+            .footer {
+                width: 100%;
+            }
+
+            .f-p-button {
+                width: 100%;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body class="f-p-body">
+    <div class="main-content">
+
+        <div class="banner ">
+            <div class="logo-content">
+                <img src="http://alivemusic.se/images/logos/banner_logo.png" alt="Collaborate Music Logo" />
+            </div>
+        </div>
+        <div class=" body-content py-5">
+            <h1>Welcome to Alive! Music</h1>
+            <p>Hi @Model.Email,</p>
+            <p>Thank you for signing up to Alive! Music. Please confirm your email address below.</p>
+
+            <a href="@Model.ResetUrl" class="f-p-button">Confirm Email</a>
+
+        </div>
+        <div class="container footer">
+            <div class="social-media">
+                <div><i class="fa-brands fa-facebook"></i></div>
+                <div><i class="fa-brands fa-instagram"></i></div>
+                <div><i class="fa-brands fa-x-twitter"></i></div>
+            </div>
+            <p class="mt-3"><small> Alive! Musical Minds Discover your musical talents today! Copyright 2023 Alive! all rights reserved.</small></p>
+        </div>
+    </div>
+
+</body>
+</html>

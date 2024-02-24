@@ -19,6 +19,7 @@ using System.Security.Claims;
 using System.Text;
 using CollaborateMusicAPI.Services.Email;
 using CollaborateMusicAPI.Services.PasswordReset;
+using ALIVEMusicAPI.SeedData;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,7 @@ builder.Services.AddScoped<IPasswordHasher<ApplicationUser>, BCryptPasswordHashe
 builder.Services.AddSingleton<ITokenValidationService, TokenValidationService>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
+builder.Services.AddScoped<RoleSeeder>();
 
 
 
@@ -82,7 +84,7 @@ builder.Services.AddSwaggerGen(c =>
 
 
 
-// Identity setup
+
 // Identity setup
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
 {
@@ -164,10 +166,19 @@ builder.Services.AddCors(corsOptions =>
     corsOptions.AddPolicy("AllowAllOrigins",
         policyBuilder =>
         {
-            policyBuilder.WithOrigins("http://localhost:3000")
+            policyBuilder.WithOrigins("http://192.168.1.80:3000")
                          .AllowAnyHeader()
                          .AllowAnyMethod();
         });
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("Manager", policy => policy.RequireRole("Manager"));
+    options.AddPolicy("Employee", policy => policy.RequireRole("Employee"));
+    options.AddPolicy("SubscribingMember", policy => policy.RequireRole("SubscribingMember"));
+    options.AddPolicy("NonPayingMember", policy => policy.RequireRole("NonPayingMember"));
 });
 
 var app = builder.Build();
@@ -176,6 +187,23 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+// Create a new scope to retrieve scoped services
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        // Get our RoleSeeder from the DI system and execute the SeedRoles method
+        var seeder = services.GetRequiredService<RoleSeeder>();
+        await seeder.SeedRoles();
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while seeding the roles.");
+    }
 }
 
 app.UseHttpsRedirection();

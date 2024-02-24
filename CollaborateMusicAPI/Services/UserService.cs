@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using ALIVEMusicAPI.Helpers;
+using ALIVEMusicAPI.Models.Entities;
 using CollaborateMusicAPI.Authentication;
 using CollaborateMusicAPI.Authorization;
 using CollaborateMusicAPI.Contexts;
@@ -21,9 +23,13 @@ public interface IUserService
     Task<ServiceResponse<ApplicationUser>> GetUserByEmailAsync(string email);
     Task<ServiceResponse<IEnumerable<ApplicationUser>>> GetAllAsync();
     Task<ServiceResponse<UserLoginDto>> LoginAsync(UserLoginDto loginDto);
+    Task<ServiceResponse> GetUserInfo(Guid userId);
+    Task<ServiceResponse> LogoutAsync(string userId);
 
 
-}
+
+
+    }
 
 public class UserService : IUserService
 {
@@ -31,13 +37,15 @@ public class UserService : IUserService
     private readonly GenerateTokenService _generateTokenService;
     private readonly ITokenService _tokenService;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ApplicationDBContext _context;
 
-    public UserService(IUsersRepository usersRepository, GenerateTokenService generateTokenService, ITokenService tokenService, UserManager<ApplicationUser> userManager)
+    public UserService(IUsersRepository usersRepository, GenerateTokenService generateTokenService, ITokenService tokenService, UserManager<ApplicationUser> userManager, ApplicationDBContext context)
     {
         _usersRepository = usersRepository;
         _generateTokenService = generateTokenService;
         _tokenService = tokenService;
         _userManager = userManager;
+        _context = context;
     }
 
     public async Task<ApplicationUser> CreateAccount(ApplicationUser user)
@@ -111,6 +119,35 @@ public class UserService : IUserService
 
         return response;
     }
+
+
+
+        public async Task<ServiceResponse> GetUserInfo(Guid userId)
+        {
+            var user = await _usersRepository.GetUserByIdAsync(userId);
+            if (user == null)
+            {
+                return new ServiceResponse
+                {
+                    StatusCode = Enums.StatusCode.NotFound,
+                    Message = "User not found."
+                };
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return new ServiceResponse
+            {
+                StatusCode = Enums.StatusCode.Ok,
+                Data = new
+                {
+                    user.Email,
+                    Roles = roles
+                }
+            };
+        }
+    
+
 
 
 
@@ -202,6 +239,13 @@ public class UserService : IUserService
                     return response;
                 }
 
+                // Assign role to user
+                var roleResult = await _userManager.AddToRoleAsync(newUser, UserRoles.NonPayingMember); // Replace with the role you want to assign
+                if (!roleResult.Succeeded)
+                {
+                    // Handle error
+                }
+
                 var tokenResponse = await _generateTokenService.CreateUserAndReturnToken(newUser);
                 if (tokenResponse.StatusCode != Enums.StatusCode.Ok)
                 {
@@ -262,19 +306,43 @@ public class UserService : IUserService
             };
         }
 
+        if (user != null)
+        {
+            var result = await _userManager.AddToRoleAsync(user, UserRoles.Admin);
+            if (!result.Succeeded)
+            {
+                // Handle error
+            }
+        }
+
         // Now that we have a token response object, we can extract the tokens from it
         loginDto.JwtToken = tokenResponse.Token;
         loginDto.RefreshToken = tokenResponse.RefreshToken;
+
+        // Decode token to get user ID or use the user service to get user details
+        var userId = _tokenService.GetUserIdFromToken(tokenResponse.Token);
+        var userFromDb = await _context.Users.FindAsync(userId);
+
+        if (userFromDb == null)
+        {
+            return new ServiceResponse<UserLoginDto>
+            {
+                StatusCode = Enums.StatusCode.NotFound,
+                Message = "User not found."
+            };
+        }
+
+        await _context.SaveChangesAsync();
 
         return new ServiceResponse<UserLoginDto>
         {
             Content = loginDto,
             StatusCode = Enums.StatusCode.Ok
         };
-
     }
 
- 
+
+
 
 
 
@@ -284,6 +352,41 @@ public class UserService : IUserService
     {
         return PasswordHelper.VerifyPassword(password, storedHash);
     }
+
+
+
+
+    public async Task<ServiceResponse> LogoutAsync(string userId)
+    {
+        var response = new ServiceResponse();
+
+        try
+        {
+            var user = await _usersRepository.GetUserByIdAsync(Guid.Parse(userId));
+            if (user == null)
+            {
+                response.StatusCode = Enums.StatusCode.NotFound;
+                response.Message = "User not found.";
+                return response;
+            }
+
+            // Invalidate the user's refresh token (if you're using refresh tokens)
+            user.RefreshToken = null;
+            await _usersRepository.UpdateUser(user);
+
+            response.StatusCode = Enums.StatusCode.Ok;
+            response.Message = "User logged out successfully.";
+        }
+        catch (Exception ex)
+        {
+            response.StatusCode = Enums.StatusCode.InternalServerError;
+            response.Message = ex.Message;
+        }
+
+        return response;
+    }
+
+
 
 
 
