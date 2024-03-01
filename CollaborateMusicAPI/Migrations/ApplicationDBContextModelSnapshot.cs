@@ -44,7 +44,7 @@ namespace CollaborateMusicAPI.Migrations
 
                     b.HasKey("SubscriptionPlanID");
 
-                    b.ToTable("SubscriptionPlans");
+                    b.ToTable("SubscriptionPlans", (string)null);
                 });
 
             modelBuilder.Entity("ALIVEMusicAPI.Models.Entities.UserSubscription", b =>
@@ -73,7 +73,7 @@ namespace CollaborateMusicAPI.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UserSubscriptions");
+                    b.ToTable("UserSubscriptions", (string)null);
                 });
 
             modelBuilder.Entity("CollaborateMusicAPI.Contexts.ApplicationUser", b =>
@@ -195,7 +195,7 @@ namespace CollaborateMusicAPI.Migrations
 
                     b.HasIndex("ArtistID");
 
-                    b.ToTable("Albums");
+                    b.ToTable("Albums", (string)null);
                 });
 
             modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.Artist", b =>
@@ -226,7 +226,7 @@ namespace CollaborateMusicAPI.Migrations
 
                     b.HasIndex("UserProfileID");
 
-                    b.ToTable("Artists");
+                    b.ToTable("Artists", (string)null);
                 });
 
             modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.Track", b =>
@@ -262,7 +262,7 @@ namespace CollaborateMusicAPI.Migrations
 
                     b.HasIndex("AlbumID");
 
-                    b.ToTable("Tracks");
+                    b.ToTable("Tracks", (string)null);
                 });
 
             modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.UserProfile", b =>
@@ -297,7 +297,7 @@ namespace CollaborateMusicAPI.Migrations
                     b.HasIndex("UserID")
                         .IsUnique();
 
-                    b.ToTable("UserProfiles");
+                    b.ToTable("UserProfiles", (string)null);
                 });
 
             modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.UserVerificationCode", b =>
@@ -325,7 +325,7 @@ namespace CollaborateMusicAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserVerificationCodes");
+                    b.ToTable("UserVerificationCodes", (string)null);
                 });
 
             modelBuilder.Entity("CollaborateMusicAPI.Models.RefreshToken", b =>
@@ -359,7 +359,7 @@ namespace CollaborateMusicAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>

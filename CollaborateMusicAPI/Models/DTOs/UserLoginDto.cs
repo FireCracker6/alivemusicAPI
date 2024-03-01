@@ -19,10 +19,10 @@ public class UserLoginDto
 
     public Boolean? RememberMe { get; set; }
 
-    public string? UserRoles { get; set; }
+    public List<string>? UserRoles { get; set; }
 
     // Add these properties for JWT and refreshToken
     public string? JwtToken { get; set; }
     public string? RefreshToken { get; set; }
-    
 }
+

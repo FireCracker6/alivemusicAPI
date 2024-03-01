@@ -19,11 +19,11 @@ namespace CollaborateMusicAPI.Services;
 
 public interface ITokenService
 {
-    Task<UserWithTokenResponse> GetTokenAsync(string email, string password, bool rememberme);
-    Task<string> RefreshTokenAsync(string accessToken, string refreshToken);
+    Task<UserWithTokenResponse> GetTokenAsync(string email, Guid userId, bool rememberMe);
+    Task<(string AccessToken, string RefreshToken)> RefreshTokenAsync(string refreshToken);
     Guid GetUserIdFromToken(string token);
     Task<string> CreateTokenAsync(string email, Guid userId);
-    Task<string> GenerateTokenAsync(string email, Guid userId, bool rememberMe);
+    Task<string> GenerateTokenAsync(string email, string userId, bool rememberMe);
 
 }
 
@@ -51,160 +51,92 @@ public class TokenService : ITokenService
         _tokenValidationService = tokenValidationService;
         _refreshTokenRepository = refreshTokenRepository;
     }
-
-    public async Task<UserWithTokenResponse> GetTokenAsync(string email,  string password, bool rememberme)
+    public async Task<UserWithTokenResponse> GetTokenAsync(string email, Guid userId, bool rememberMe)
     {
-      
+        var user = await _usersRepository.GetUserByEmailAsync(email);
+        var userName = await _signInManager.UserManager.FindByEmailAsync(user!.Email!);
+        var token = await GenerateAuthToken(user!.Email!, user.Id.ToString()); // Generate the JWT token
 
-
-        var response = new ServiceResponse<UserWithTokenResponse>();
-        try
+        // Check for an existing valid refresh token
+        var existingRefreshToken = await _refreshTokenRepository.GetRefreshTokenAsync(userId);
+        if (existingRefreshToken != null && !existingRefreshToken.IsRevoked && existingRefreshToken.Expires > DateTime.UtcNow)
         {
-            var user = await _usersRepository.GetUserByEmailAsync(email);
-         
-            var userName = await _signInManager.UserManager.FindByEmailAsync(user.Email);   
-          
-
-            if (userName != null)
+            // Existing token is still valid, use it
+            return new UserWithTokenResponse
             {
-           
-                var result = await _signInManager.PasswordSignInAsync(userName, password, rememberme, false);
-
-                if (result.Succeeded)
-                {
-                    var token = GenerateAuthToken(user!.Email!, user.Id); // Generate the token
-                                                                          // Generate the refresh token string and create the RefreshToken entity
-                    var refreshTokenString = GenerateRefreshToken(user.Email, rememberme);
-                    // Create the refresh token entity
-                    var refreshTokenEntity = new RefreshToken
-                    {
-                        Token = refreshTokenString.ToString()!,
-                        Expires = DateTime.UtcNow.AddDays(rememberme ? 30 : 7),
-                        Created = DateTime.UtcNow,
-                        UserId = user.Id,
-                        RememberMe = rememberme
-                    };
-
-                    // Add the refresh token entity to the database using RefreshTokenRepository
-                    await _refreshTokenRepository.AddRefreshTokenAsync(refreshTokenEntity);
-                    // Immediately validate the token
-                    var tokenHandler = new JwtSecurityTokenHandler();
-                    var validationParameters = _tokenValidationService.GetTokenValidationParameters(); 
-
-                    try
-                    {
-                        // This will throw an exception if the token is invalid
-                        tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
-                    }
-                    catch (SecurityTokenException ex)
-                    {
-                        // Handle the case where the token is invalid
-                        Console.WriteLine($"Token validation error: {ex.Message}");
-                        // Depending on your error handling, either throw, log the error, or return a failure response
-                        throw;
-                    }
-
-                    // If the token is valid, then you can proceed to issue it to the client
-                 
-                    await _userManager.UpdateAsync(user);
-
-                    return new UserWithTokenResponse
-                    {
-                        User = user, // Assuming you want to send the user info back as well
-                        Token = token, // This should match the property name in your UserWithTokenResponse class
-                        RefreshToken = refreshTokenString.ToString()! // Send the refresh token string to the client
-                    };
-
-                }
-                else
-{
-    var errorMessage = result.IsLockedOut ? "User account is locked out."
-                    : result.IsNotAllowed ? "User is not allowed to login."
-                    : result.RequiresTwoFactor ? "Login requires two-factor authentication."
-                    : "Invalid login attempt.";
-    Debug.WriteLine(errorMessage);
-    response.Message = errorMessage;
-}
-
-            }
-            else
-            {
-                response.Message = "User not found";
-            }
+                Token = token,
+                RefreshToken = existingRefreshToken.Token,
+                User = user
+            };
         }
-        catch (Exception ex)
+
+        // No valid existing token, generate a new one
+        var newRefreshToken = await GenerateRefreshToken(user.Email, rememberMe);
+        var refreshTokenEntity = new RefreshToken
         {
-            response.StatusCode = Enums.StatusCode.InternalServerError;
-            response.Message = ex.Message;
-            // Log the exception details here
-        }
-        return null; // Consider returning an appropriate error message or throw an exception
+            Token = newRefreshToken,
+            UserId = user.Id,
+            RememberMe = rememberMe,
+            Expires = DateTime.UtcNow.AddDays(rememberMe ? 30 : 7),
+            Created = DateTime.UtcNow
+
+        };
+
+        // Add the new refresh token entity to the database
+        await _refreshTokenRepository.AddRefreshTokenAsync(refreshTokenEntity);
+
+        return new UserWithTokenResponse
+        {
+            Token = token,
+            RefreshToken = newRefreshToken,
+            User = user
+        };
     }
 
 
-    public async Task<string> RefreshTokenAsync(string accessToken, string refreshToken)
+
+    public async Task<(string AccessToken, string RefreshToken)> RefreshTokenAsync(string refreshToken)
     {
-        var principal = GetPrincipalFromExpiredToken(accessToken);
-      
-
-       
-
-        var userIdClaim = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-        var emailClaim = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
-
-        if (emailClaim == null || userIdClaim == null)
-        {
-            throw new Exception("Invalid token: email or user ID claim missing.");
-        }
-
-        var email = emailClaim.Value;
-        var userIdString = userIdClaim.Value;
-        Guid userId;
-
-        if (!Guid.TryParse(userIdString, out userId))
-        {
-            throw new Exception("Invalid token: user ID claim is not a valid GUID.");
-        }
-
-        var user = await _userManager.FindByIdAsync(userId.ToString());
+        var user = await _userManager.Users
+            .Include(u => u.RefreshTokens)
+            .FirstOrDefaultAsync(u => u.RefreshTokens.Any(rt => rt.Token == refreshToken));
 
         if (user == null)
         {
             throw new Exception("User does not exist.");
         }
 
-        // Find the matching refresh token in the user's collection of refresh tokens.
-        var refreshTokenEntity = user.RefreshTokens.SingleOrDefault(rt => rt.Token == refreshToken);
-
+        var refreshTokenEntity = user.RefreshTokens.FirstOrDefault(rt => rt.Token == refreshToken);
         if (refreshTokenEntity == null || refreshTokenEntity.IsRevoked)
         {
             throw new Exception("Invalid or revoked refresh token.");
         }
 
-        // Now you can access the RememberMe property from the refreshTokenEntity
         var rememberMe = refreshTokenEntity.RememberMe;
-        var newToken = GenerateAuthToken(email, userId); // Pass userId here
 
-        // Generate a new refresh token and update the refresh token entity as needed
-        var newRefreshTokenString = GenerateRefreshToken(user.Email!, rememberMe);
-        refreshTokenEntity.Token = newRefreshTokenString.ToString()!; // Update the token string
-        refreshTokenEntity.Expires = DateTime.UtcNow.AddDays(rememberMe ? 30 : 7); // Set new expiry
+        // Generate new access token
+        var newAccessToken = await CreateTokenAsync(user.Email, user.Id);
 
-        // No need to set user.RefreshToken as it is a collection now
-        // user.RefreshToken = newRefreshTokenString; // This line should be removed
+        bool shouldRegenerateRefreshToken = refreshTokenEntity.Expires < DateTime.UtcNow.AddDays(7); // Example condition
 
-        // Update the refresh token entity in the database
-        await _usersRepository.SaveRefreshToken(refreshTokenEntity);
-        
+        string newRefreshTokenString = refreshToken;
+        if (shouldRegenerateRefreshToken)
+        {
+            // Generate a new refresh token string
+            newRefreshTokenString = await GenerateRefreshToken(user.Email, rememberMe);
+            refreshTokenEntity.Token = newRefreshTokenString;
+            refreshTokenEntity.Expires = DateTime.UtcNow.AddDays(rememberMe ? 30 : 7);
+            await _refreshTokenRepository.UpdateRefreshTokenAsync(user.Id, refreshTokenEntity); // Update in database
+        }
 
-        return newToken;
+        return (newAccessToken, newRefreshTokenString);
     }
 
-    public Task<string> CreateTokenAsync(string email, Guid userId)
+
+    public async Task<string> CreateTokenAsync(string email, Guid userId)
     {
-        // Since GenerateAuthToken is not an asynchronous method, you don't need to await it.
-        // Instead, you can directly return the Task.FromResult to wrap the result into a Task.
-        return Task.FromResult(GenerateAuthToken(email, userId));
+        // Use await to call the async method
+        return await GenerateAuthToken(email, userId.ToString());
     }
 
     private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
@@ -234,38 +166,41 @@ public class TokenService : ITokenService
             return keyId;
         }
     }
-
-    private string GenerateAuthToken(string email, Guid userId)
+    private async Task<string> GenerateAuthToken(string email, string userId)
     {
-         // Generates a new KeyId
-        _logger.LogInformation($"Key ID generated: {keyId}"); 
-
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.UTF8.GetBytes(_securityKey); 
-
-        if (key.Length < 16)
+        // Assuming _userManager is available in this context
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
         {
-            throw new InvalidOperationException("The key is too short.");
+            throw new Exception("User not found.");
         }
 
+        var roles = await _userManager.GetRolesAsync(user);
 
+        var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.Email, email),
+        new Claim(ClaimTypes.NameIdentifier, userId)
+    };
+
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
+
+        var key = Encoding.UTF8.GetBytes(_securityKey);
         var securityKey = new SymmetricSecurityKey(key) { KeyId = "4b623c772ff94971e1b1bb0723b2a0cb" };
-
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[]
-            {
-            new Claim(ClaimTypes.Email, email),
-            new Claim(ClaimTypes.NameIdentifier, userId.ToString())
-        }),
-            Expires = DateTime.UtcNow.AddHours(1),
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.UtcNow.AddDays(20),
             SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature)
         };
 
+        var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
-
 
 
 
@@ -345,27 +280,18 @@ public class TokenService : ITokenService
 
         return refreshToken.Token;
     }
-    public async Task<string> GenerateTokenAsync(string email, Guid userId, bool rememberMe)
-    {
-        // Generate a new token using the existing synchronous method.
-        var newToken = GenerateAuthToken(email, userId);
 
-        // Generate a new refresh token using the existing asynchronous method.
+    public async Task<string> GenerateTokenAsync(string email, string userId, bool rememberMe)
+    {
+        var newToken = GenerateAuthToken(email, userId); // Synchronous operation
+
+        // If a refresh token is needed
         var newRefreshToken = await GenerateRefreshToken(email, rememberMe);
 
-        // Save the new refresh token with the related user information if necessary.
-        // Note: This step is based on assumption since your provided code has the repository commented out.
-        await _usersRepository.SaveRefreshToken(new RefreshToken
-        {
-            Token = newRefreshToken,
-            UserId = userId,
-            Expires = DateTime.UtcNow.AddDays(rememberMe ? 30 : 7),
-            Created = DateTime.UtcNow
-        });
 
-        // Return the new token.
-        return newToken;
+        return await newToken;
     }
+
 
 
 }

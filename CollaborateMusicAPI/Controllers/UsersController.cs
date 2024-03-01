@@ -100,7 +100,6 @@ public class UsersController : ControllerBase
             return Problem();
         }
     }
-
     [HttpPost("login")]
     public async Task<IActionResult> Login(UserLoginDto loginDto)
     {
@@ -111,21 +110,31 @@ public class UsersController : ControllerBase
             return Unauthorized();  // Return 401 Unauthorized if login fails
         }
 
+        // Check if UserRoles is null
+        if (response.Content.UserRoles == null)
+        {
+            return BadRequest("UserRoles is null");
+        }
+
         // Assuming response.Content contains the JWT token
         var token = response.Content.JwtToken;
+        var refreshToken = response.Content.RefreshToken;
 
         // Now return the token along with user details
         return Ok(new
         {
             Token = token,
+            RefreshToken = refreshToken,
             User = new
             {
                 Id = response.Content.Id,
                 Email = response.Content.Email,
-                FullName = response.Content.Email // Use the actual property for the user's full name
+                FullName = response.Content.Email, // Use the actual property for the user's full name
+                Roles = response.Content.UserRoles
             }
         });
     }
+
 
 
     [HttpPost("logout")]

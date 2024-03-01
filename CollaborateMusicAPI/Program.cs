@@ -20,6 +20,8 @@ using System.Text;
 using CollaborateMusicAPI.Services.Email;
 using CollaborateMusicAPI.Services.PasswordReset;
 using ALIVEMusicAPI.SeedData;
+using ALIVEMusicAPI.Services;
+using ALIVEMusicAPI.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,11 +43,18 @@ builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
 builder.Services.AddScoped<RoleSeeder>();
 
+builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+builder.Services.AddScoped<IAzureBlobService>(sp => new AzureBlobService(builder.Configuration.GetConnectionString("AzureBlobStorage")));
+builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
+
 
 
 
 builder.Services.AddHttpClient<IGoogleTokenService, GoogleTokenService>();
 builder.Services.AddTransient<GenerateTokenService>();
+
+
 
 builder.Services.Configure<IdentityOptions>(options =>
      options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier);

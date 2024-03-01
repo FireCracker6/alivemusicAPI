@@ -165,3 +165,6 @@ C:\Users\Svart\Source\Repos\Webbutveckling\ALIVEMusicAPI\ALIVEMusicAPI\Collabora
 C:\Users\Svart\Source\Repos\Webbutveckling\ALIVEMusicAPI\ALIVEMusicAPI\CollaborateMusicAPI\obj\Debug\net9.0\ALIVEMusicAPI.pdb
 C:\Users\Svart\Source\Repos\Webbutveckling\ALIVEMusicAPI\ALIVEMusicAPI\CollaborateMusicAPI\obj\Debug\net9.0\ALIVEMusicAPI.genruntimeconfig.cache
 C:\Users\Svart\Source\Repos\Webbutveckling\ALIVEMusicAPI\ALIVEMusicAPI\CollaborateMusicAPI\obj\Debug\net9.0\ref\ALIVEMusicAPI.dll
+C:\Users\Svart\Source\Repos\Webbutveckling\ALIVEMusicAPI\ALIVEMusicAPI\CollaborateMusicAPI\bin\Debug\net9.0\Azure.Storage.Blobs.dll
+C:\Users\Svart\Source\Repos\Webbutveckling\ALIVEMusicAPI\ALIVEMusicAPI\CollaborateMusicAPI\bin\Debug\net9.0\Azure.Storage.Common.dll
+C:\Users\Svart\Source\Repos\Webbutveckling\ALIVEMusicAPI\ALIVEMusicAPI\CollaborateMusicAPI\bin\Debug\net9.0\System.IO.Hashing.dll

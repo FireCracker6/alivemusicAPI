@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ALIVEMusicAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f3135a0376264fa8baf5abe9f8f81ac89b8aca3b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+430127bfd1e2865655875d43f4d20201c11aeee9")]
 [assembly: System.Reflection.AssemblyProductAttribute("ALIVEMusicAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ALIVEMusicAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

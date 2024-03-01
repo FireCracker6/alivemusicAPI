@@ -296,7 +296,7 @@ public class UserService : IUserService
 
         // Since TokenService is already generating a refresh token, retrieve it
         // Since TokenService is now returning a UserWithTokenResponse object, retrieve it
-        var tokenResponse = await _tokenService.GetTokenAsync(user.Email, loginDto.Password, loginDto.RememberMe ?? false);
+        var tokenResponse = await _tokenService.GetTokenAsync(user.Email, user.Id, loginDto.RememberMe ?? false);
         if (tokenResponse == null || string.IsNullOrEmpty(tokenResponse.Token))
         {
             return new ServiceResponse<UserLoginDto>
@@ -306,33 +306,15 @@ public class UserService : IUserService
             };
         }
 
-        if (user != null)
-        {
-            var result = await _userManager.AddToRoleAsync(user, UserRoles.Admin);
-            if (!result.Succeeded)
-            {
-                // Handle error
-            }
-        }
+        var roles = await _userManager.GetRolesAsync(user);
+
 
         // Now that we have a token response object, we can extract the tokens from it
         loginDto.JwtToken = tokenResponse.Token;
         loginDto.RefreshToken = tokenResponse.RefreshToken;
 
-        // Decode token to get user ID or use the user service to get user details
-        var userId = _tokenService.GetUserIdFromToken(tokenResponse.Token);
-        var userFromDb = await _context.Users.FindAsync(userId);
-
-        if (userFromDb == null)
-        {
-            return new ServiceResponse<UserLoginDto>
-            {
-                StatusCode = Enums.StatusCode.NotFound,
-                Message = "User not found."
-            };
-        }
-
-        await _context.SaveChangesAsync();
+        // Assign the roles to the DTO
+        loginDto.UserRoles = roles.ToList();
 
         return new ServiceResponse<UserLoginDto>
         {

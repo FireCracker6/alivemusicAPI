@@ -1,11 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "5ysjQR12mD8WUGLhDzTNFjw+ObzAevuFCe8LmmutcnqjBeVFoy6lFprHyp6buBjsj+2WCw7GG1hw2NbTsDbr8A==",
+  "dgSpecHash": "dfKpZtwy3CrC4gcFBQOYPGTAWt0e5LzOjDNX23fyXrHEXN+Q+rDtxlFg+T2K0VOTrJ9af5hTSPwo4ynhOuQTjg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Svart\\Source\\Repos\\Webbutveckling\\ALIVEMusicAPI\\ALIVEMusicAPI\\CollaborateMusicAPI\\ALIVEMusicAPI.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Svart\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
+    "C:\\Users\\Svart\\.nuget\\packages\\azure.core\\1.36.0\\azure.core.1.36.0.nupkg.sha512",
     "C:\\Users\\Svart\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
+    "C:\\Users\\Svart\\.nuget\\packages\\azure.storage.blobs\\12.19.1\\azure.storage.blobs.12.19.1.nupkg.sha512",
+    "C:\\Users\\Svart\\.nuget\\packages\\azure.storage.common\\12.18.1\\azure.storage.common.12.18.1.nupkg.sha512",
     "C:\\Users\\Svart\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\Svart\\.nuget\\packages\\google.apis\\1.67.0\\google.apis.1.67.0.nupkg.sha512",
     "C:\\Users\\Svart\\.nuget\\packages\\google.apis.auth\\1.67.0\\google.apis.auth.1.67.0.nupkg.sha512",
@@ -83,6 +85,7 @@
     "C:\\Users\\Svart\\.nuget\\packages\\system.drawing.common\\6.0.0\\system.drawing.common.6.0.0.nupkg.sha512",
     "C:\\Users\\Svart\\.nuget\\packages\\system.identitymodel.tokens.jwt\\7.3.1\\system.identitymodel.tokens.jwt.7.3.1.nupkg.sha512",
     "C:\\Users\\Svart\\.nuget\\packages\\system.io.filesystem.accesscontrol\\5.0.0\\system.io.filesystem.accesscontrol.5.0.0.nupkg.sha512",
+    "C:\\Users\\Svart\\.nuget\\packages\\system.io.hashing\\6.0.0\\system.io.hashing.6.0.0.nupkg.sha512",
     "C:\\Users\\Svart\\.nuget\\packages\\system.io.pipelines\\6.0.3\\system.io.pipelines.6.0.3.nupkg.sha512",
     "C:\\Users\\Svart\\.nuget\\packages\\system.management\\7.0.2\\system.management.7.0.2.nupkg.sha512",
     "C:\\Users\\Svart\\.nuget\\packages\\system.memory\\4.5.5\\system.memory.4.5.5.nupkg.sha512",

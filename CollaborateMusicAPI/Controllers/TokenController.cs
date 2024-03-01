@@ -21,7 +21,7 @@ public class TokenController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var tokenResponse = await _tokenService.GetTokenAsync(model.Email, model.Password, model.RememberMe ?? false);
+        var tokenResponse = await _tokenService.GetTokenAsync(model.Email, model.Id, model.RememberMe ?? false);
         if (tokenResponse == null || string.IsNullOrEmpty(tokenResponse.Token))
         {
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
@@ -37,13 +37,32 @@ public class TokenController : ControllerBase
     }
 
 
+    //[HttpPost("refresh")]
+    //public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
+    //{
+    //    try
+    //    {
+    //        var newToken = await _tokenService.RefreshTokenAsync( request.RefreshToken);
+    //        return Ok(new { token = newToken });
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return BadRequest(ex.Message);
+    //    }
+    //}
+
     [HttpPost("refresh")]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
     {
         try
         {
-            var newToken = await _tokenService.RefreshTokenAsync(request.AccessToken, request.RefreshToken);
-            return Ok(new { token = newToken });
+            // Now expecting only the refresh token in the request
+            var (newAccessToken, newRefreshToken) = await _tokenService.RefreshTokenAsync(request.RefreshToken);
+            return Ok(new
+            {
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken
+            });
         }
         catch (Exception ex)
         {
