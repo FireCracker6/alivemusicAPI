@@ -34,7 +34,7 @@ public class ArtistProfileController : ControllerBase
                 return BadRequest(ModelState);
             }
 
-            var existingProfile = _context.UserProfiles.FirstOrDefault(p => p.UserID == artistProfileDTO.UserID);
+            var existingProfile = _context.Artists.FirstOrDefault(p => p.UserID == artistProfileDTO.UserID);
             if (existingProfile != null)
             {
                 return Conflict("Profile already exists");
@@ -55,12 +55,12 @@ public class ArtistProfileController : ControllerBase
         }
     }
 
-    [HttpGet("getartistprofile/{userId}")]
-    public async Task<IActionResult> GetArtistProfile(string userId)
+    [HttpGet("getartistprofile/{artistId}")]
+    public async Task<IActionResult> GetArtistProfile(int artistId )
     {
         try
         {
-            var response = await _profileService.GetArtistProfileAsync(userId);
+            var response = await _profileService.GetArtistProfileAsync(artistId);
             if (response.Content == null)
             {
                 return NotFound("Profile not found");
@@ -111,6 +111,8 @@ public class ArtistProfileController : ControllerBase
         }
     }
 
+   
+    
 
 
 

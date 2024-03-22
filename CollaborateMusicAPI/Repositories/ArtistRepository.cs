@@ -10,6 +10,9 @@ public interface IArtistRepository : IRepository<Artist, ApplicationDBContext>
     Task<Artist?> GetArtistByUserIdAsync(Guid userId);
     Task UpdateArtist(Artist artist);
     Task SaveArtist(Artist artist);
+    Task<Artist?> GetArtistByIdAsync(int artistId);
+    
+
 }
 
 
@@ -24,8 +27,16 @@ public class ArtistRepository : Repository<Artist, ApplicationDBContext>, IArtis
 
         var profile = await _context.Artists
         .Include(p => p.User)
-        .FirstOrDefaultAsync(p => p.UserProfileID == userId);
+        .FirstOrDefaultAsync(p => p.UserID == userId);
         return profile;
+    }
+
+    public async Task<Artist?> GetArtistByIdAsync(int artistId)
+    {
+        var artist = await _context.Artists
+        .Include(p => p.User)
+        .FirstOrDefaultAsync(p => p.ArtistID == artistId);
+        return artist;
     }
 
 
@@ -40,4 +51,8 @@ public class ArtistRepository : Repository<Artist, ApplicationDBContext>, IArtis
         await _context.Artists.AddAsync(artist);
         await _context.SaveChangesAsync();
     }
+
+  
+
+   
 }

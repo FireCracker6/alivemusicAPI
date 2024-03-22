@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace CollaborateMusicAPI.Migrations
+namespace ALIVEMusicAPI.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
     partial class ApplicationDBContextModelSnapshot : ModelSnapshot
@@ -21,6 +21,117 @@ namespace CollaborateMusicAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ALIVEMusicAPI.Models.CommentClosure", b =>
+                {
+                    b.Property<int>("AncestorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DescendantId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Depth")
+                        .HasColumnType("int");
+
+                    b.HasKey("AncestorId", "DescendantId");
+
+                    b.HasIndex("DescendantId");
+
+                    b.ToTable("CommentClosures");
+                });
+
+            modelBuilder.Entity("ALIVEMusicAPI.Models.Entities.Comment", b =>
+                {
+                    b.Property<int>("CommentID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentID"));
+
+                    b.Property<int>("ArtistID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ParentCommentID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TrackID")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CommentID");
+
+                    b.HasIndex("ArtistID");
+
+                    b.HasIndex("ParentCommentID");
+
+                    b.HasIndex("TrackID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("ALIVEMusicAPI.Models.Entities.CommentLikes", b =>
+                {
+                    b.Property<int>("LikeID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LikeID"));
+
+                    b.Property<int>("CommentID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("LikeID");
+
+                    b.HasIndex("CommentID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("CommentLikes");
+                });
+
+            modelBuilder.Entity("ALIVEMusicAPI.Models.Entities.Likes", b =>
+                {
+                    b.Property<int>("LikeID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LikeID"));
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TrackID")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("LikeID");
+
+                    b.HasIndex("TrackID");
+
+                    b.HasIndex("UserID", "TrackID")
+                        .IsUnique();
+
+                    b.ToTable("Likes");
+                });
 
             modelBuilder.Entity("ALIVEMusicAPI.Models.Entities.SubscriptionPlan", b =>
                 {
@@ -44,7 +155,7 @@ namespace CollaborateMusicAPI.Migrations
 
                     b.HasKey("SubscriptionPlanID");
 
-                    b.ToTable("SubscriptionPlans", (string)null);
+                    b.ToTable("SubscriptionPlans");
                 });
 
             modelBuilder.Entity("ALIVEMusicAPI.Models.Entities.UserSubscription", b =>
@@ -73,7 +184,7 @@ namespace CollaborateMusicAPI.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UserSubscriptions", (string)null);
+                    b.ToTable("UserSubscriptions");
                 });
 
             modelBuilder.Entity("CollaborateMusicAPI.Contexts.ApplicationUser", b =>
@@ -195,7 +306,7 @@ namespace CollaborateMusicAPI.Migrations
 
                     b.HasIndex("ArtistID");
 
-                    b.ToTable("Albums", (string)null);
+                    b.ToTable("Albums");
                 });
 
             modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.Artist", b =>
@@ -219,14 +330,15 @@ namespace CollaborateMusicAPI.Migrations
                     b.Property<string>("Genre")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserProfileID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ArtistID");
 
-                    b.HasIndex("UserProfileID");
+                    b.HasIndex("UserID")
+                        .IsUnique();
 
-                    b.ToTable("Artists", (string)null);
+                    b.ToTable("Artists");
                 });
 
             modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.Track", b =>
@@ -237,17 +349,22 @@ namespace CollaborateMusicAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TrackID"));
 
-                    b.Property<int>("AlbumID")
+                    b.Property<int?>("AlbumID")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("Duration")
+                    b.Property<int>("ArtistID")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan?>("Duration")
                         .HasColumnType("time");
 
-                    b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("JobID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Lyrics")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TrackFilePath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -255,23 +372,22 @@ namespace CollaborateMusicAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TrackNumber")
+                    b.Property<int?>("TrackNumber")
                         .HasColumnType("int");
 
                     b.HasKey("TrackID");
 
                     b.HasIndex("AlbumID");
 
-                    b.ToTable("Tracks", (string)null);
+                    b.HasIndex("ArtistID");
+
+                    b.ToTable("Tracks");
                 });
 
             modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.UserProfile", b =>
                 {
-                    b.Property<int>("UserProfileID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserProfileID"));
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Bio")
                         .HasColumnType("nvarchar(max)");
@@ -286,18 +402,12 @@ namespace CollaborateMusicAPI.Migrations
                     b.Property<string>("ProfilePicturePath")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("WebsiteURL")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserProfileID");
+                    b.HasKey("UserID");
 
-                    b.HasIndex("UserID")
-                        .IsUnique();
-
-                    b.ToTable("UserProfiles", (string)null);
+                    b.ToTable("UserProfiles");
                 });
 
             modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.UserVerificationCode", b =>
@@ -325,7 +435,7 @@ namespace CollaborateMusicAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserVerificationCodes", (string)null);
+                    b.ToTable("UserVerificationCodes");
                 });
 
             modelBuilder.Entity("CollaborateMusicAPI.Models.RefreshToken", b =>
@@ -359,7 +469,7 @@ namespace CollaborateMusicAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens", (string)null);
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -493,6 +603,97 @@ namespace CollaborateMusicAPI.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ALIVEMusicAPI.Models.CommentClosure", b =>
+                {
+                    b.HasOne("ALIVEMusicAPI.Models.Entities.Comment", "Ancestor")
+                        .WithMany("Descendants")
+                        .HasForeignKey("AncestorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ALIVEMusicAPI.Models.Entities.Comment", "Descendant")
+                        .WithMany("Ancestors")
+                        .HasForeignKey("DescendantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Ancestor");
+
+                    b.Navigation("Descendant");
+                });
+
+            modelBuilder.Entity("ALIVEMusicAPI.Models.Entities.Comment", b =>
+                {
+                    b.HasOne("CollaborateMusicAPI.Models.Entities.Artist", "Artist")
+                        .WithMany("Comments")
+                        .HasForeignKey("ArtistID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ALIVEMusicAPI.Models.Entities.Comment", "ParentComment")
+                        .WithMany("ChildComments")
+                        .HasForeignKey("ParentCommentID")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("CollaborateMusicAPI.Models.Entities.Track", "Track")
+                        .WithMany("Comments")
+                        .HasForeignKey("TrackID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CollaborateMusicAPI.Contexts.ApplicationUser", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Artist");
+
+                    b.Navigation("ParentComment");
+
+                    b.Navigation("Track");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ALIVEMusicAPI.Models.Entities.CommentLikes", b =>
+                {
+                    b.HasOne("ALIVEMusicAPI.Models.Entities.Comment", "Comment")
+                        .WithMany("CommentLikes")
+                        .HasForeignKey("CommentID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CollaborateMusicAPI.Contexts.ApplicationUser", "User")
+                        .WithMany("CommentLikes")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Comment");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ALIVEMusicAPI.Models.Entities.Likes", b =>
+                {
+                    b.HasOne("CollaborateMusicAPI.Models.Entities.Track", "Track")
+                        .WithMany("Likes")
+                        .HasForeignKey("TrackID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CollaborateMusicAPI.Contexts.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Track");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ALIVEMusicAPI.Models.Entities.UserSubscription", b =>
                 {
                     b.HasOne("ALIVEMusicAPI.Models.Entities.SubscriptionPlan", "SubscriptionPlan")
@@ -525,24 +726,28 @@ namespace CollaborateMusicAPI.Migrations
 
             modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.Artist", b =>
                 {
-                    b.HasOne("CollaborateMusicAPI.Models.Entities.UserProfile", "UserProfile")
-                        .WithMany("Artists")
-                        .HasForeignKey("UserProfileID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("CollaborateMusicAPI.Contexts.ApplicationUser", "User")
+                        .WithOne("Artist")
+                        .HasForeignKey("CollaborateMusicAPI.Models.Entities.Artist", "UserID");
 
-                    b.Navigation("UserProfile");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.Track", b =>
                 {
                     b.HasOne("CollaborateMusicAPI.Models.Entities.Album", "Album")
                         .WithMany()
-                        .HasForeignKey("AlbumID")
+                        .HasForeignKey("AlbumID");
+
+                    b.HasOne("CollaborateMusicAPI.Models.Entities.Artist", "Artist")
+                        .WithMany()
+                        .HasForeignKey("ArtistID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Album");
+
+                    b.Navigation("Artist");
                 });
 
             modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.UserProfile", b =>
@@ -629,17 +834,42 @@ namespace CollaborateMusicAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ALIVEMusicAPI.Models.Entities.Comment", b =>
+                {
+                    b.Navigation("Ancestors");
+
+                    b.Navigation("ChildComments");
+
+                    b.Navigation("CommentLikes");
+
+                    b.Navigation("Descendants");
+                });
+
             modelBuilder.Entity("CollaborateMusicAPI.Contexts.ApplicationUser", b =>
                 {
+                    b.Navigation("Artist")
+                        .IsRequired();
+
+                    b.Navigation("CommentLikes");
+
+                    b.Navigation("Comments");
+
                     b.Navigation("RefreshTokens");
 
                     b.Navigation("UserProfile")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.UserProfile", b =>
+            modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.Artist", b =>
                 {
-                    b.Navigation("Artists");
+                    b.Navigation("Comments");
+                });
+
+            modelBuilder.Entity("CollaborateMusicAPI.Models.Entities.Track", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Likes");
                 });
 #pragma warning restore 612, 618
         }

@@ -22,6 +22,7 @@ using CollaborateMusicAPI.Services.PasswordReset;
 using ALIVEMusicAPI.SeedData;
 using ALIVEMusicAPI.Services;
 using ALIVEMusicAPI.Repositories;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +48,17 @@ builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IAzureBlobService>(sp => new AzureBlobService(builder.Configuration.GetConnectionString("AzureBlobStorage")));
 builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
+builder.Services.AddScoped<ITrackRepository, TrackRepository>();
+builder.Services.AddScoped<ITrackService, TrackService>();
+
+builder.Services.AddScoped<ILikesRepository, LikesRepository>();
+builder.Services.AddScoped<ILikesService, LikesService>();
+
+builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
+builder.Services.AddScoped<ICommentsService, CommentsService>();
+
+builder.Services.AddScoped<ICommentLikesRepository, CommentLikesRepository>();
+builder.Services.AddScoped<ICommentLikesService, CommentLikesService>();
 
 
 
@@ -54,7 +66,8 @@ builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
 builder.Services.AddHttpClient<IGoogleTokenService, GoogleTokenService>();
 builder.Services.AddTransient<GenerateTokenService>();
 
-
+builder.Services.AddControllers().AddJsonOptions(x =>
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
 builder.Services.Configure<IdentityOptions>(options =>
      options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier);
@@ -125,7 +138,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
- 
+
 //.AddJwtBearer(jwtOptions =>
 //{
 //    jwtOptions.Events = new JwtBearerEvents
@@ -158,7 +171,7 @@ builder.Services.AddAuthentication(options =>
 //        ValidateIssuerSigningKey = true,
 //        ValidIssuer = builder.Configuration["Jwt:Issuer"],
 //        ValidAudience = builder.Configuration["Jwt:Audience"],
-        
+
 //    };
 //})
 .AddCookie()
@@ -175,11 +188,12 @@ builder.Services.AddCors(corsOptions =>
     corsOptions.AddPolicy("AllowAllOrigins",
         policyBuilder =>
         {
-            policyBuilder.WithOrigins("http://192.168.1.80:3000")
+            policyBuilder.AllowAnyOrigin()
                          .AllowAnyHeader()
                          .AllowAnyMethod();
         });
 });
+
 
 builder.Services.AddAuthorization(options =>
 {

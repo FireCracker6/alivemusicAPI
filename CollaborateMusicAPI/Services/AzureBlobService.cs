@@ -7,13 +7,16 @@ namespace ALIVEMusicAPI.Services;
 public interface IAzureBlobService
 {
     Task<string> UploadFileAsync(string blobContainerName, string blobName, Stream content);
-    string GetBlobSasUrl(string blobContainerName, string blobName);
+    Task<string> GetBlobSasUrl(string blobContainerName, string blobName);
+    Task ReplaceBlobAsync(string blobContainerName, string blobName, Stream newContent);
+    string AccountName { get; }
 }
 
 public class AzureBlobService : IAzureBlobService
 {
     private readonly BlobServiceClient _blobServiceClient;
     private readonly StorageSharedKeyCredential _storageSharedKeyCredential;
+    public string AccountName { get; private set; }
 
     public AzureBlobService(string connectionString)
     {
@@ -24,6 +27,7 @@ public class AzureBlobService : IAzureBlobService
 
         _storageSharedKeyCredential = new StorageSharedKeyCredential(storageAccountName, storageAccountKey);
         _blobServiceClient = new BlobServiceClient(connectionString);
+        AccountName = storageAccountName;
     }
 
     public async Task<string> UploadFileAsync(string blobContainerName, string blobName, Stream content)
@@ -37,27 +41,51 @@ public class AzureBlobService : IAzureBlobService
         return blobClient.Uri.ToString();
     }
 
-    public string GetBlobSasUrl(string blobContainerName, string blobName)
+    public async Task ReplaceBlobAsync(string blobContainerName, string blobName, Stream newContent)
     {
         var blobContainerClient = _blobServiceClient.GetBlobContainerClient(blobContainerName);
         var blobClient = blobContainerClient.GetBlobClient(blobName);
+
+        // Delete the existing blob
+        if (await blobClient.ExistsAsync())
+        {
+            await blobClient.DeleteIfExistsAsync();
+        }
+
+        // Upload the new file
+        await blobClient.UploadAsync(newContent, overwrite: true);
+    }
+
+    public async Task<string> GetBlobSasUrl(string blobContainerName, string blobName)
+    {
+        var blobContainerClient = _blobServiceClient.GetBlobContainerClient(blobContainerName);
+        var blobClient = blobContainerClient.GetBlobClient(blobName);
+
+        // Check if the blob exists
+        if (!(await blobClient.ExistsAsync()))
+        {
+            // Handle the case where the blob does not exist
+            // You might want to return null or throw an exception
+            return null!;
+        }
 
         var sasBuilder = new BlobSasBuilder
         {
             BlobContainerName = blobContainerClient.Name,
             BlobName = blobClient.Name,
             Resource = "b", // b for blob
-            StartsOn = DateTimeOffset.UtcNow,
-            ExpiresOn = DateTimeOffset.UtcNow.AddDays(7), // SAS URL will be valid for 1 hour
+            StartsOn = DateTimeOffset.UtcNow.AddMinutes(-5), // Start 5 minutes in the past
+            ExpiresOn = DateTimeOffset.UtcNow.AddHours(1),
         };
 
         // Allow read permissions
         sasBuilder.SetPermissions(BlobSasPermissions.Read);
 
         var sasToken = sasBuilder.ToSasQueryParameters(_storageSharedKeyCredential).ToString();
-
+        await blobClient.GetPropertiesAsync();
         // Return the full SAS URL
         return $"{blobClient.Uri}?{sasToken}";
     }
+
 
 }

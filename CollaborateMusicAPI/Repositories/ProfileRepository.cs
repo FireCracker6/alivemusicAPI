@@ -22,6 +22,7 @@ public class ProfileRepository : Repository<UserProfile, ApplicationDBContext>, 
     {
         var profile = await _context.UserProfiles
     .Include(p => p.User)
+    .Include(p => p.User.Artist)
     .FirstOrDefaultAsync(p => p.UserID == userId);
         return profile;
     }

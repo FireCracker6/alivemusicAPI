@@ -1,4 +1,5 @@
-﻿using CollaborateMusicAPI.Models;
+﻿using ALIVEMusicAPI.Models.Entities;
+using CollaborateMusicAPI.Models;
 using CollaborateMusicAPI.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 
@@ -14,9 +15,17 @@ namespace CollaborateMusicAPI.Contexts
         public string? OAuthId { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
-        public virtual UserProfile UserProfile { get; set; }
+        public virtual UserProfile UserProfile { get; set; } // UserProfile is not optional
+
+        public virtual Artist Artist { get; set; } // Artist is optional
+
+        // Collection navigation property for Comments
+        public virtual ICollection<Comment>? Comments { get; set; }
+        public virtual ICollection<CommentLikes> CommentLikes { get; set; }
+
 
         public virtual ICollection<RefreshToken> RefreshTokens { get; set; } = new HashSet<RefreshToken>();
+
     }
 
 

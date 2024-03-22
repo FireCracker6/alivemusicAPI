@@ -12,8 +12,9 @@ public interface IProfileService
     Task<ServiceResponse<UserProfileDTO>> GetProfileAsync(string userId);
     Task<ServiceResponse<ArtistDTO>> SaveArtistProfileDetailsAsync(ArtistDTO artistDTO);
     Task<ServiceResponse<string>> UploadArtistBannerLogoAsync(Guid userProfileID, IFormFile bannerLogoPic);
-    Task<ServiceResponse<ArtistDTO>> GetArtistProfileAsync(string userId);
-
+    Task<ServiceResponse<ArtistDTO>> GetArtistProfileAsync(int artistId);
+    Task<ServiceResponse<UserProfileDTO>> UpdateProfileAsync(UserProfileDTO userProfileDTO);
+    Task<ServiceResponse<string>> UpdateProfilePictureAsync(Guid userId, IFormFile profilePic);
 }
 
 public class ProfileService : IProfileService
@@ -46,6 +47,7 @@ public class ProfileService : IProfileService
             // Upload the profile picture to Azure Blob Storage
             var profilePicturePath = await _azureBlobService.UploadFileAsync("profile-pictures", $"{userProfileDTO.UserID}.jpg", profilePicStream);
 
+
             var profile = new UserProfile
             {
                 FullName = userProfileDTO.FullName,
@@ -53,7 +55,8 @@ public class ProfileService : IProfileService
                 Location = userProfileDTO.Location,
                 WebsiteURL = userProfileDTO.WebsiteURL,
                 UserID = userProfileDTO.UserID,
-                ProfilePicturePath = profilePicturePath
+                ProfilePicturePath = $"https://{_azureBlobService.AccountName}.blob.core.windows.net/profile-pictures/{userProfileDTO.UserID}.jpg"
+
             };
             await _profileRepository.SaveProfile(profile);
             response.Content = userProfileDTO;
@@ -88,7 +91,7 @@ public class ProfileService : IProfileService
                 await userProfileDTO.ProfilePic.CopyToAsync(profilePicStream);
                 profilePicStream.Position = 0;
                 var profilePicturePath = await _azureBlobService.UploadFileAsync("profile-pictures", $"{userProfileDTO.UserID}.jpg", profilePicStream);
-                profile.ProfilePicturePath = profilePicturePath;
+                profile.ProfilePicturePath = $"https://{_azureBlobService.AccountName}.blob.core.windows.net/profile-pictures/{userProfileDTO.UserID}.jpg";
             }
 
             profile.FullName = userProfileDTO.FullName;
@@ -110,13 +113,13 @@ public class ProfileService : IProfileService
         return response;    
 
     }
-    // Create an optional Artist profile
-    public async Task<ServiceResponse<ArtistDTO>> CreateArtistProfileAsync(ArtistDTO artistDTO)
+
+    public async Task<ServiceResponse<string>> UpdateProfilePictureAsync(Guid userId, IFormFile profilePic)
     {
-        var response = new ServiceResponse<ArtistDTO>();
+        var response = new ServiceResponse<string>();
         try
         {
-            var profile = await _profileRepository.GetProfileByUserIdAsync(artistDTO.UserProfileID);
+            var profile = await _profileRepository.GetProfileByUserIdAsync(userId);
             if (profile == null)
             {
                 response.StatusCode = StatusCode.NotFound;
@@ -124,36 +127,29 @@ public class ProfileService : IProfileService
                 return response;
             }
 
-            var artist = new Artist
+            if (profilePic != null)
             {
-                ArtistName = artistDTO.ArtistName,
-                Description = artistDTO.Description,
-                Genre = artistDTO.Genre,
-                UserProfileID = artistDTO.UserProfileID
-            };
-
-            if (artistDTO.ArtistPic != null)
-            {
-                using var artistPicStream = new MemoryStream();
-                await artistDTO.ArtistPic.CopyToAsync(artistPicStream);
-                artistPicStream.Position = 0;
-                var artistPicturePath = await _azureBlobService.UploadFileAsync("artist-pictures", $"{artistDTO.UserProfileID}.jpg", artistPicStream);
-                artist.ArtistPicturePath = artistPicturePath;
+                using var profilePicStream = new MemoryStream();
+                await profilePic.CopyToAsync(profilePicStream);
+                profilePicStream.Position = 0;
+                var profilePicturePath = await _azureBlobService.UploadFileAsync("profile-pictures", $"{userId}.jpg", profilePicStream);
+                profile.ProfilePicturePath = $"https://{_azureBlobService.AccountName}.blob.core.windows.net/profile-pictures/{userId}.jpg";
             }
 
-            await _artistRepository.SaveArtist(artist);
-            response.Content = artistDTO;
-            response.StatusCode = StatusCode.Created;
-            response.Message = "Artist profile created successfully";
+            await _profileRepository.UpdateProfile(profile);
+            response.Content = profile.ProfilePicturePath;
+            response.StatusCode = StatusCode.Ok;
+            response.Message = "Profile picture updated successfully";
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Error creating artist profile");
+            _logger.LogError(e, "Error updating profile picture");
             response.StatusCode = StatusCode.InternalServerError;
-            response.Message = "Error creating artist profile";
+            response.Message = "Error updating profile picture";
         }
         return response;
     }
+
 
 
 
@@ -171,7 +167,7 @@ public class ProfileService : IProfileService
                 response.Message = "Profile not found";
                 return response;
             }
-
+        
             var profileDto = new UserProfileDTO
             {
                 FullName = profile.FullName,
@@ -180,7 +176,8 @@ public class ProfileService : IProfileService
                 Bio = profile.Bio,
                 Location = profile.Location,
                 WebsiteURL = profile.WebsiteURL,
-                ProfilePicturePath = _azureBlobService.GetBlobSasUrl("profile-pictures", $"{userId}.jpg")
+
+                ProfilePicturePath = profile.ProfilePicturePath
             };
 
             response.Content = profileDto;
@@ -198,13 +195,13 @@ public class ProfileService : IProfileService
         return response;
     }
 
-    public async Task<ServiceResponse<ArtistDTO>> GetArtistProfileAsync(string userId)
+    public async Task<ServiceResponse<ArtistDTO>> GetArtistProfileAsync(int artistId)
     {
         var response = new ServiceResponse<ArtistDTO>();
 
         try
         {
-            var artist = await _artistRepository.GetArtistByUserIdAsync(Guid.Parse(userId));
+            var artist = await _artistRepository.GetArtistByIdAsync(artistId);
             if (artist == null)
             {
                 response.StatusCode = StatusCode.NotFound;
@@ -212,14 +209,16 @@ public class ProfileService : IProfileService
                 return response;
             }
 
+            // Generate a new SAS token for the artist picture
+            var artistPicturePath = await _azureBlobService.GetBlobSasUrl("artist-banner-logos", $"{artist.UserID}.jpg");
+
             var artistDto = new ArtistDTO
             {
-                ArtistID = artist.ArtistID,
                 ArtistName = artist.ArtistName,
                 Description = artist.Description,
                 Genre = artist.Genre,
-                UserProfileID = artist.UserProfileID,
-                ArtistPicturePath = _azureBlobService.GetBlobSasUrl("artist-pictures", $"{userId}.jpg")
+                UserID = artist.UserID,
+                ArtistPicturePath = artistPicturePath
             };
 
             response.Content = artistDto;
@@ -235,16 +234,12 @@ public class ProfileService : IProfileService
 
         return response;
     }
-
-
-
-
     public async Task<ServiceResponse<ArtistDTO>> SaveArtistProfileDetailsAsync(ArtistDTO artistDTO)
     {
         var response = new ServiceResponse<ArtistDTO>();
         try
         {
-            var profile = await _profileRepository.GetProfileByUserIdAsync(artistDTO.UserProfileID);
+            var profile = await _profileRepository.GetProfileByUserIdAsync((Guid)artistDTO.UserID);
             if (profile == null)
             {
                 response.StatusCode = StatusCode.NotFound;
@@ -257,7 +252,8 @@ public class ProfileService : IProfileService
                 ArtistName = artistDTO.ArtistName,
                 Description = artistDTO.Description,
                 Genre = artistDTO.Genre,
-                UserProfileID = artistDTO.UserProfileID
+                UserID = (Guid)artistDTO.UserID,
+                ArtistPicturePath = $"https://{_azureBlobService.AccountName}.blob.core.windows.net/artist-banner-logos/{artistDTO.UserID}.jpg"
             };
 
             await _artistRepository.SaveArtist(artist);
@@ -273,17 +269,42 @@ public class ProfileService : IProfileService
         }
         return response;
     }
+
     public async Task<ServiceResponse<string>> UploadArtistBannerLogoAsync(Guid userProfileID, IFormFile bannerLogoPic)
     {
         var response = new ServiceResponse<string>();
         try
         {
+            // Check if the file is an image
+            var validImageTypes = new string[]
+            {
+        "image/gif",
+        "image/jpeg",
+        "image/pjpeg",
+        "image/png"
+            };
+
+            if (bannerLogoPic == null || bannerLogoPic.Length == 0 || !validImageTypes.Contains(bannerLogoPic.ContentType))
+            {
+                response.StatusCode = StatusCode.BadRequest;
+                response.Message = "Invalid file. Please upload an image file.";
+                return response;
+            }
+
+            // Check if the file size is too large (more than 2MB)
+            if (bannerLogoPic.Length > 4 * 1024 * 1024)
+            {
+                response.StatusCode = StatusCode.BadRequest;
+                response.Message = "File size is too large. Please upload an image file less than 4MB.";
+                return response;
+            }
+
             using var bannerLogoPicStream = new MemoryStream();
             await bannerLogoPic.CopyToAsync(bannerLogoPicStream);
             bannerLogoPicStream.Position = 0;
-            var bannerLogoPicPath = await _azureBlobService.UploadFileAsync("artist-banner-logos", $"{userProfileID}.jpg", bannerLogoPicStream);
+            await _azureBlobService.UploadFileAsync("artist-banner-logos", $"{userProfileID}.jpg", bannerLogoPicStream);
 
-            response.Content = bannerLogoPicPath;
+            response.Content = $"https://{_azureBlobService.AccountName}.blob.core.windows.net/artist-banner-logos/{userProfileID}.jpg";
             response.StatusCode = StatusCode.Created;
             response.Message = "Banner logo picture uploaded successfully";
         }
@@ -295,5 +316,73 @@ public class ProfileService : IProfileService
         }
         return response;
     }
+
+
+    public async Task<UserProfileDTO> GetUserProfile(Guid userId)
+    {
+        var profile = await _profileRepository.GetProfileByUserIdAsync(userId);
+        if (profile == null)
+        {
+            throw new Exception("Profile not found");
+        }
+
+        var userProfileDto = new UserProfileDTO
+        {
+            UserID = profile.User.Id,
+            UserName = profile.User.UserName,
+            Email = profile.User.Email,
+            FullName = profile.FullName,
+            Bio = profile.Bio,
+            ProfilePicturePath = profile.ProfilePicturePath,
+            Location = profile.Location,
+            WebsiteURL = profile.WebsiteURL,
+        };
+
+        if (profile.User.Artist != null)
+        {
+            userProfileDto.ArtistName = profile.User.Artist.ArtistName;
+            userProfileDto.ArtistDescription = profile.User.Artist.Description;
+            userProfileDto.ArtistGenre = profile.User.Artist.Genre;
+            userProfileDto.ArtistPicturePath = profile.User.Artist.ArtistPicturePath;
+        }
+
+        return userProfileDto;
+    }
+
+
+    // PRODUCTION!!! ONLY
+
+    //public async Task<ServiceResponse<string>> UploadArtistBannerLogoAsync(Guid userProfileID, IFormFile bannerLogoPic)
+    //{
+    //    var response = new ServiceResponse<string>();
+    //    try
+    //    {
+    //        // Check if the artist already has a banner logo picture
+    //        var existingBannerLogoPicPath = _azureBlobService.GetBlobSasUrl("artist-banner-logos", $"{userProfileID}.jpg");
+    //        if (!string.IsNullOrEmpty(existingBannerLogoPicPath))
+    //        {
+    //            response.StatusCode = StatusCode.Conflict;
+    //            response.Message = "Banner logo picture already exists. Do you want to update it?";
+    //            return response;
+    //        }
+
+    //        using var bannerLogoPicStream = new MemoryStream();
+    //        await bannerLogoPic.CopyToAsync(bannerLogoPicStream);
+    //        bannerLogoPicStream.Position = 0;
+    //        var bannerLogoPicPath = await _azureBlobService.UploadFileAsync("artist-banner-logos", $"{userProfileID}.jpg", bannerLogoPicStream);
+
+    //        response.Content = bannerLogoPicPath;
+    //        response.StatusCode = StatusCode.Created;
+    //        response.Message = "Banner logo picture uploaded successfully";
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        _logger.LogError(e, "Error uploading banner logo picture");
+    //        response.StatusCode = StatusCode.InternalServerError;
+    //        response.Message = "Error uploading banner logo picture";
+    //    }
+    //    return response;
+    //}
+
 
 }

@@ -58,6 +58,66 @@ public class ProfileController : ControllerBase
         }
        
     }
+    [HttpPut("updateprofile")]
+    public async Task<IActionResult> UpdateProfile(UserProfileDTO userProfileDTO)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var existingProfile = _context.UserProfiles.FirstOrDefault(p => p.UserID == userProfileDTO.UserID);
+            if (existingProfile == null)
+            {
+                return NotFound("Profile not found");
+            }
+
+            var response = await _profileService.UpdateProfileAsync(userProfileDTO);
+
+            if (response.StatusCode == Enums.StatusCode.NotFound)
+            {
+                return NotFound(response.Message);
+            }
+
+            return Ok(response.Content);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpGet("profile-picture/{userId}")]
+    public async Task<IActionResult> GetProfilePicture(string userId)
+    
+    
+    
+    {
+        var serviceResponse = await _profileService.GetProfileAsync(userId);
+        if (serviceResponse.Content == null)
+        {
+            return NotFound("Profile not found");
+        }
+
+        var httpClient = new HttpClient();
+        var imageBytes = await httpClient.GetByteArrayAsync(serviceResponse.Content.ProfilePicturePath);
+
+        return File(imageBytes, "image/jpeg");
+    }
+
+
+    [HttpPut("updateprofilepicture")]
+    public async Task<IActionResult> UpdateProfilePicture([FromForm]  Guid userId, IFormFile file)
+    {
+        var response = await _profileService.UpdateProfilePictureAsync( userId, file);
+        if (response.StatusCode == Enums.StatusCode.NotFound)
+        {
+            return NotFound(response.Message);
+        }
+        return Ok(response.Content);
+    }
 
  
    

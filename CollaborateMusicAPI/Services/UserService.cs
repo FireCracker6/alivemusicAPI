@@ -313,6 +313,8 @@ public class UserService : IUserService
         loginDto.JwtToken = tokenResponse.Token;
         loginDto.RefreshToken = tokenResponse.RefreshToken;
 
+
+        loginDto.UserId = user.Id; // Add this line
         // Assign the roles to the DTO
         loginDto.UserRoles = roles.ToList();
 

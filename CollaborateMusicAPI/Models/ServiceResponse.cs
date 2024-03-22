@@ -7,4 +7,6 @@ public class ServiceResponse<T>
     public StatusCode StatusCode { get; set; } 
     public T? Content { get; set; }
     public string Message { get; set; } = null!;
+    public object Data { get; set; }
+    public Boolean Success { get; set; }
 }

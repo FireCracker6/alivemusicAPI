@@ -55,11 +55,6 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "ArtistID",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
         "Name": "ArtistName",
         "Type": "System.String",
         "IsRequired": false
@@ -85,18 +80,8 @@
         "IsRequired": false
       },
       {
-        "Name": "UserProfileID",
-        "Type": "System.Guid",
-        "IsRequired": false
-      },
-      {
-        "Name": "FullName",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Bio",
-        "Type": "System.String",
+        "Name": "UserID",
+        "Type": "System.Nullable\u00601[[System.Guid, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       },
       {
@@ -111,26 +96,6 @@
       },
       {
         "Name": "WebsiteURL",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "UserID",
-        "Type": "System.Guid",
-        "IsRequired": false
-      },
-      {
-        "Name": "Name",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Price",
-        "Type": "System.Decimal",
-        "IsRequired": false
-      },
-      {
-        "Name": "Duration",
         "Type": "System.String",
         "IsRequired": false
       }
@@ -156,14 +121,14 @@
   {
     "ContainingType": "ALIVEMusicAPI.Controllers.ArtistProfileController",
     "Method": "GetArtistProfile",
-    "RelativePath": "api/ArtistProfile/getartistprofile/{userId}",
+    "RelativePath": "api/ArtistProfile/getartistprofile/{artistId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userId",
-        "Type": "System.String",
+        "Name": "artistId",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
@@ -180,6 +145,251 @@
       {
         "Name": "request",
         "Type": "CollaborateMusicAPI.Authentication.AuthRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ALIVEMusicAPI.Controllers.CommentLikesController",
+    "Method": "GetLikesCount",
+    "RelativePath": "api/CommentLikes/{commentId}/likescount",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "commentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ALIVEMusicAPI.Controllers.CommentLikesController",
+    "Method": "AddLike",
+    "RelativePath": "api/CommentLikes/addlike",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "likeDTO",
+        "Type": "ALIVEMusicAPI.Models.DTOs.CommentLikesDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ALIVEMusicAPI.Controllers.CommentLikesController",
+    "Method": "GetLikedComments",
+    "RelativePath": "api/CommentLikes/getlikedcomments/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ALIVEMusicAPI.Controllers.CommentLikesController",
+    "Method": "RemoveLike",
+    "RelativePath": "api/CommentLikes/removelike",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "likeDTO",
+        "Type": "ALIVEMusicAPI.Models.DTOs.CommentLikesDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ALIVEMusicAPI.Controllers.CommentLikesController",
+    "Method": "GetLikesCountByTrackId",
+    "RelativePath": "api/CommentLikes/track/{trackId}/likescount",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "trackId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ALIVEMusicAPI.Controllers.CommentsController",
+    "Method": "AddComment",
+    "RelativePath": "api/Comments/addcomment",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "commentDTO",
+        "Type": "ALIVEMusicAPI.Models.DTOs.CommentsDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ALIVEMusicAPI.Controllers.CommentsController",
+    "Method": "AddReply",
+    "RelativePath": "api/Comments/addreply",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "commentDTO",
+        "Type": "ALIVEMusicAPI.Models.DTOs.CommentsDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ALIVEMusicAPI.Controllers.CommentsController",
+    "Method": "GetCommentsByCommentId",
+    "RelativePath": "api/Comments/comment/{commentId}/comments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "commentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ALIVEMusicAPI.Controllers.CommentsController",
+    "Method": "DeleteComment",
+    "RelativePath": "api/Comments/deletecomment",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "commentDTO",
+        "Type": "ALIVEMusicAPI.Models.DTOs.CommentsDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ALIVEMusicAPI.Controllers.CommentsController",
+    "Method": "GetCommentsByTrackId",
+    "RelativePath": "api/Comments/track/{trackId}/comments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "trackId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ALIVEMusicAPI.Controllers.CommentsController",
+    "Method": "UpdateComment",
+    "RelativePath": "api/Comments/updatecomment",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "commentDTO",
+        "Type": "ALIVEMusicAPI.Models.DTOs.CommentsDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ALIVEMusicAPI.Controllers.LikesController",
+    "Method": "LikeTrack",
+    "RelativePath": "api/Likes",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "likeDTO",
+        "Type": "ALIVEMusicAPI.Models.DTOs.LikesDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ALIVEMusicAPI.Controllers.LikesController",
+    "Method": "GetLikesCount",
+    "RelativePath": "api/Likes/{trackId}/likescount",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "trackId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ALIVEMusicAPI.Controllers.LikesController",
+    "Method": "UnlikeTrack",
+    "RelativePath": "api/Likes/{userId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "trackId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ALIVEMusicAPI.Controllers.LikesController",
+    "Method": "GetLikesByUserId",
+    "RelativePath": "api/Likes/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -210,8 +420,18 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "UserProfileID",
-        "Type": "System.Int32",
+        "Name": "UserID",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
         "IsRequired": false
       },
       {
@@ -245,21 +465,6 @@
         "IsRequired": false
       },
       {
-        "Name": "UserID",
-        "Type": "System.Guid",
-        "IsRequired": false
-      },
-      {
-        "Name": "UserName",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Email",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
         "Name": "PhoneNumber",
         "Type": "System.String",
         "IsRequired": false
@@ -268,6 +473,42 @@
         "Name": "ProfilePictureURL",
         "Type": "System.String",
         "IsRequired": false
+      },
+      {
+        "Name": "ArtistName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ArtistDescription",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ArtistGenre",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ArtistPicturePath",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CollaborateMusicAPI.Controllers.ProfileController",
+    "Method": "GetProfilePicture",
+    "RelativePath": "api/Profile/profile-picture/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
@@ -284,6 +525,113 @@
         "Name": "userId",
         "Type": "System.String",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CollaborateMusicAPI.Controllers.ProfileController",
+    "Method": "UpdateProfile",
+    "RelativePath": "api/Profile/updateprofile",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "UserID",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FullName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Bio",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProfilePicturePath",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProfilePic",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "Location",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "WebsiteURL",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProfilePictureURL",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ArtistName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ArtistDescription",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ArtistGenre",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ArtistPicturePath",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CollaborateMusicAPI.Controllers.ProfileController",
+    "Method": "UpdateProfilePicture",
+    "RelativePath": "api/Profile/updateprofilepicture",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -348,6 +696,161 @@
         "Name": "request",
         "Type": "CollaborateMusicAPI.Services.RefreshTokenRequest",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ALIVEMusicAPI.Controllers.TrackController",
+    "Method": "GetAllTracks",
+    "RelativePath": "api/Track",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ALIVEMusicAPI.Controllers.TrackController",
+    "Method": "GetTrack",
+    "RelativePath": "api/Track/{trackId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "trackId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ALIVEMusicAPI.Controllers.TrackController",
+    "Method": "GetTracksByArtistId",
+    "RelativePath": "api/Track/artist/{artistId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "artistId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ALIVEMusicAPI.Controllers.TrackController",
+    "Method": "GetTrackByJobId",
+    "RelativePath": "api/Track/job/{jobId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "jobId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ALIVEMusicAPI.Controllers.TrackController",
+    "Method": "ReplaceTrack",
+    "RelativePath": "api/Track/replaceTrack",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ContentType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ContentDisposition",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Headers",
+        "Type": "Microsoft.AspNetCore.Http.IHeaderDictionary",
+        "IsRequired": false
+      },
+      {
+        "Name": "Length",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FileName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "blobName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ALIVEMusicAPI.Controllers.TrackController",
+    "Method": "UploadTrackAsync",
+    "RelativePath": "api/Track/uploadtrack",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "TrackFile",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "TrackName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Duration",
+        "Type": "System.Nullable\u00601[[System.TimeSpan, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "TrackNumber",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Lyrics",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "AlbumID",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "ArtistID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "JobID",
+        "Type": "System.Nullable\u00601[[System.Guid, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

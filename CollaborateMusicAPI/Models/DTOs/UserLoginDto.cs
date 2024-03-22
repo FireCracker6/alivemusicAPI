@@ -4,7 +4,10 @@ namespace CollaborateMusicAPI.Models.DTOs;
 
 public class UserLoginDto
 {
+
     public Guid Id { get; set; }
+
+    public Guid? UserId { get; set; }
     [Required(ErrorMessage = "Email is required")]
     [DataType(DataType.EmailAddress)]
     [EmailAddress(ErrorMessage = "Invalid email address format")]
